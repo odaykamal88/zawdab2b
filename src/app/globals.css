@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
+/* ── Light-first design: white bg, gold #D69828 ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-name: "Zawda";
+
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-surface: #f8f8f6;
+  --bg-surface-2: #f1f0ec;
+  --bg-dark: #0a0e1a;
+
+  /* Borders */
+  --border: #e5e4df;
+  --border-accent: #D69828;
+  --border-alert: #dc2626;
+
+  /* Text */
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --text-faint: #a3a3a3;
+  --text-on-dark: #e8edf5;
+
+  /* Accent */
+  --gold: #D69828;
+  --gold-light: #f5e6c8;
+  --gold-glow: rgba(214, 152, 40, 0.10);
+  --alert: #dc2626;
+
+  /* Type scale (clamp-based) */
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+  --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+
+  /* Fonts */
+  --font-display: "Cabinet Grotesk", system-ui, sans-serif;
+  --font-body: "Satoshi", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
+/* ── Tailwind v4 theme inline ── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-2: var(--bg-surface-2);
+  --color-bg-dark: var(--bg-dark);
+  --color-border: var(--border);
+  --color-border-accent: var(--border-accent);
+  --color-border-alert: var(--border-alert);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-text-on-dark: var(--text-on-dark);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-glow: var(--gold-glow);
+  --color-alert: var(--alert);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Base styles ── */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Utility classes ── */
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+.gold-glow { box-shadow: 0 0 40px var(--gold-glow); }
+
+/* ── Brand diamond pattern (from official identity asset) ──
+   Sparse variant for hero/section backgrounds. Keep opacity low so content stays readable. */
+.bg-zawda-pattern {
+  background-image: url("/brand/zawda-pattern-sparse.png");
+  background-size: 960px auto;
+  background-repeat: repeat;
+  background-position: center;
+}
+.bg-zawda-pattern-dense {
+  background-image: url("/brand/zawda-pattern-dense.png");
+  background-size: 720px auto;
+  background-repeat: repeat;
+  background-position: center;
 }
