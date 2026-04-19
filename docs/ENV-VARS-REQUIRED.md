@@ -75,9 +75,9 @@ Used by: `/api/cron/crawl` and `/api/dashboard/seed`.
 
 | Variable | Description |
 |---|---|
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL (e.g. `https://zawda.com`) |
+| `NEXT_PUBLIC_APP_URL` | Canonical site URL (e.g. `https://zawda.me`) — primary. Also accepted as `NEXT_PUBLIC_SITE_URL` for backward compatibility. |
 
-Used by: JSON-LD structured data in `src/app/layout.tsx`.
+Used by: JSON-LD structured data in `src/app/layout.tsx`, `robots.ts`, `sitemap.ts`.
 
 ---
 
@@ -86,7 +86,7 @@ Used by: JSON-LD structured data in `src/app/layout.tsx`.
 | Variable | Description |
 |---|---|
 | `RESEND_API_KEY` | API key from Resend dashboard (resend.com) |
-| `FROM_EMAIL` | Sender address (e.g. `noreply@zawda.me`) — must be a verified domain in Resend |
+| `RESEND_FROM_EMAIL` | Sender address (e.g. `compliance@zawda.me`) — must be a verified domain in Resend. Also accepted as `FROM_EMAIL` for backward compatibility. |
 | `PRIVACY_EMAIL` | Where DSAR confirmation copies and new-request alerts are sent (e.g. `privacy@zawda.me`) |
 | `OPS_ALERT_EMAIL` | Where incident breach alerts are sent (e.g. `ops@zawda.me`) |
 

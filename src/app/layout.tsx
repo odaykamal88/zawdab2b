@@ -54,7 +54,7 @@ export default function RootLayout({
               name: BRAND_NAME,
               description:
                 'MENA regulatory intelligence and treasury advisory for digital asset compliance.',
-              url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://zawda.com',
+              url: process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://zawda.com',
               sameAs: ['https://www.linkedin.com/company/zawdabtc', 'https://x.com'],
             }),
           }}

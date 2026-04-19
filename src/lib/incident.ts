@@ -99,7 +99,7 @@ export async function notifyAffectedUsers(
   if (!apiKey) return { notified: 0, errors: 0 }
 
   const resend = new Resend(apiKey)
-  const from = process.env.FROM_EMAIL ?? 'noreply@zawda.me'
+  const from = process.env.RESEND_FROM_EMAIL ?? process.env.FROM_EMAIL ?? 'noreply@zawda.me'
   const privacyEmail = process.env.PRIVACY_EMAIL ?? 'privacy@zawda.me'
 
   let notified = 0
@@ -183,7 +183,7 @@ async function sendOpsAlert(incident: Incident): Promise<void> {
   if (!apiKey || !opsEmail) return
 
   const resend = new Resend(apiKey)
-  const from = process.env.FROM_EMAIL ?? 'noreply@zawda.me'
+  const from = process.env.RESEND_FROM_EMAIL ?? process.env.FROM_EMAIL ?? 'noreply@zawda.me'
   const deadline = notificationDeadline(incident.flaggedAt)
 
   await resend.emails.send({

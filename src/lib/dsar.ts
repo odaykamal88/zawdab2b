@@ -119,7 +119,7 @@ async function sendDsarEmails(req: DsarRequest): Promise<void> {
   if (!apiKey) return
 
   const resend = new Resend(apiKey)
-  const from = process.env.FROM_EMAIL ?? 'noreply@zawda.me'
+  const from = process.env.RESEND_FROM_EMAIL ?? process.env.FROM_EMAIL ?? 'noreply@zawda.me'
   const privacyEmail = process.env.PRIVACY_EMAIL ?? 'privacy@zawda.me'
   const due = new Date(req.dueAt).toLocaleDateString('en-GB', {
     day: 'numeric',
