@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { redis } from '@/lib/redis'
 import { listVault, storeFile, limitsFor } from '@/lib/vault-storage'
+import { writeAuditLog, extractRequestMeta } from '@/lib/audit-log'
 
 const ratelimit = new Ratelimit({
   redis,
@@ -18,6 +19,19 @@ export async function GET(req: NextRequest) {
 
   const plan = req.headers.get('x-plan') ?? undefined
   const records = await listVault(userId)
+
+  const { ip, userAgent } = extractRequestMeta(req)
+  void writeAuditLog({
+    eventType: 'vault.list',
+    userId,
+    resourceType: 'vault',
+    resourceId: userId,
+    ip,
+    userAgent,
+    status: 'success',
+    details: { count: records.length },
+  }).catch(() => undefined)
+
   return NextResponse.json({
     records: records.map(({ tenantId: _t, blobUrl: _b, ...rest }) => rest),
     limits: limitsFor(plan),
@@ -62,8 +76,31 @@ export async function POST(req: NextRequest) {
   })
 
   if ('error' in result) {
+    const { ip: errIp, userAgent: errUa } = extractRequestMeta(req)
+    void writeAuditLog({
+      eventType: 'vault.upload',
+      userId,
+      resourceType: 'vault',
+      resourceId: docId,
+      ip: errIp,
+      userAgent: errUa,
+      status: 'failure',
+      details: { error: result.error },
+    }).catch(() => undefined)
     return NextResponse.json({ error: result.error }, { status: result.status })
   }
+
+  const { ip, userAgent } = extractRequestMeta(req)
+  void writeAuditLog({
+    eventType: 'vault.upload',
+    userId,
+    resourceType: 'vault',
+    resourceId: result.record.id,
+    ip,
+    userAgent,
+    status: 'success',
+    details: { filename: result.record.filename, size: result.record.size },
+  }).catch(() => undefined)
 
   const { tenantId: _t, blobUrl: _b, ...record } = result.record
   return NextResponse.json({ record })

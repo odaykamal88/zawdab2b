@@ -81,6 +81,29 @@ Used by: JSON-LD structured data in `src/app/layout.tsx`.
 
 ---
 
+## Email (Resend)
+
+| Variable | Description |
+|---|---|
+| `RESEND_API_KEY` | API key from Resend dashboard (resend.com) |
+| `FROM_EMAIL` | Sender address (e.g. `noreply@zawda.me`) — must be a verified domain in Resend |
+| `PRIVACY_EMAIL` | Where DSAR confirmation copies and new-request alerts are sent (e.g. `privacy@zawda.me`) |
+| `OPS_ALERT_EMAIL` | Where incident breach alerts are sent (e.g. `ops@zawda.me`) |
+
+Used by: `src/lib/dsar.ts` (DSAR confirmation + admin alert) and `src/lib/incident.ts` (breach notification pipeline, SLA §6.5).
+
+---
+
+## Clerk Webhook
+
+| Variable | Description |
+|---|---|
+| `CLERK_WEBHOOK_SECRET` | Signing secret from Clerk dashboard → Webhooks (format: `whsec_<base64>`) |
+
+Used by: `src/app/api/webhooks/clerk/route.ts` — logs auth events (login, logout, user created/deleted) to the audit log. If unset, the webhook endpoint is disabled in production. Register the endpoint URL in Clerk dashboard as: `https://your-domain.com/api/webhooks/clerk`.
+
+---
+
 ## Generation Commands
 
 ```bash

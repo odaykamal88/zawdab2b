@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { redis } from '@/lib/redis'
 import { readFileDecrypted, deleteFile } from '@/lib/vault-storage'
+import { writeAuditLog, extractRequestMeta } from '@/lib/audit-log'
 
 const ratelimit = new Ratelimit({
   redis,
@@ -24,7 +25,32 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!isValidId(id)) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const result = await readFileDecrypted(userId, id)
-  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!result) {
+    const { ip, userAgent } = extractRequestMeta(req)
+    void writeAuditLog({
+      eventType: 'vault.download',
+      userId,
+      resourceType: 'vault',
+      resourceId: id,
+      ip,
+      userAgent,
+      status: 'failure',
+      details: { reason: 'not_found' },
+    }).catch(() => undefined)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  const { ip, userAgent } = extractRequestMeta(req)
+  void writeAuditLog({
+    eventType: 'vault.download',
+    userId,
+    resourceType: 'vault',
+    resourceId: id,
+    ip,
+    userAgent,
+    status: 'success',
+    details: { filename: result.record.filename },
+  }).catch(() => undefined)
 
   const safeName = result.record.filename.replace(/"/g, '')
   return new NextResponse(new Uint8Array(result.data), {
@@ -49,6 +75,30 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   if (!isValidId(id)) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const ok = await deleteFile(userId, id)
-  if (!ok) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  const { ip, userAgent } = extractRequestMeta(req)
+  if (!ok) {
+    void writeAuditLog({
+      eventType: 'vault.delete',
+      userId,
+      resourceType: 'vault',
+      resourceId: id,
+      ip,
+      userAgent,
+      status: 'failure',
+      details: { reason: 'not_found' },
+    }).catch(() => undefined)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  void writeAuditLog({
+    eventType: 'vault.delete',
+    userId,
+    resourceType: 'vault',
+    resourceId: id,
+    ip,
+    userAgent,
+    status: 'success',
+  }).catch(() => undefined)
+
   return NextResponse.json({ ok: true })
 }

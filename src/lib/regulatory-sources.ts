@@ -51,6 +51,10 @@ export interface RegulatoryUpdate {
   deadlineDate?: string
   /** Whether this was already dispatched */
   dispatched: boolean
+  /** When the regulator originally published this update (falls back to date if not parsed) */
+  publishedAt?: string
+  /** When Zawda dispatched this to subscribers — used for SLA §3.1 tracking */
+  dispatchedAt?: string
 }
 
 export const UPDATE_TYPE_LABELS: Record<UpdateType, string> = {

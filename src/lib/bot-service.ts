@@ -62,21 +62,21 @@ export function shouldDispatchNow(
     subscriber.weekNumber = currentWeek
   }
 
-  // Critical-only subscribers: only get critical alerts
-  if (subscriber.frequency === 'critical-only') {
-    return update.severity === 'critical' && subscriber.weeklyCount < 2
-  }
+  // SLA §3.1: critical alerts MUST be delivered within 4 hours — bypass all weekly caps.
+  // The UX preference to limit messages cannot override a contractual SLA obligation.
+  if (update.severity === 'critical') return true
 
-  // Weekly: batch everything, only break for critical
+  // Critical-only subscribers get nothing else
+  if (subscriber.frequency === 'critical-only') return false
+
+  // Weekly: batch everything non-critical into the digest
   if (subscriber.frequency === 'weekly') {
-    if (update.severity === 'critical' && subscriber.weeklyCount < 1) return true
-    return false // batched into weekly digest
+    return false
   }
 
-  // Twice-weekly: allow up to 2 dispatches
+  // Twice-weekly: allow high-severity up to 2 dispatches per week
   if (subscriber.frequency === 'twice-weekly') {
-    if (update.severity === 'critical' && subscriber.weeklyCount < 2) return true
-    if (update.severity === 'high' && subscriber.weeklyCount < 1) return true
+    if (update.severity === 'high' && subscriber.weeklyCount < 2) return true
     return false
   }
 
