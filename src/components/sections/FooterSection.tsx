@@ -10,6 +10,13 @@ const NAV_LINKS = [
   { label: 'Free Tools', href: '#tools' },
 ]
 
+const SUPPORT_LINKS = [
+  { label: 'Help Center', href: '/help' },
+  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'SLA', href: '/sla' },
+]
+
 export function FooterSection() {
   return (
     <footer className="border-t border-border py-12 bg-bg-surface" aria-label="Site footer">
@@ -26,13 +33,25 @@ export function FooterSection() {
             </p>
           </div>
 
-          <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer navigation">
-            {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className="text-text-muted hover:text-text text-[length:var(--text-sm)] transition-colors">
-                {link.label}
+          <div className="flex flex-col gap-4">
+            <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer navigation">
+              {NAV_LINKS.map((link) => (
+                <a key={link.href} href={link.href} className="text-text-muted hover:text-text text-[length:var(--text-sm)] transition-colors">
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <a href="mailto:support@zawda.io" className="text-text-faint hover:text-gold text-[length:var(--text-xs)] transition-colors">
+                support@zawda.io
               </a>
-            ))}
-          </nav>
+              {SUPPORT_LINKS.map((link) => (
+                <a key={link.href} href={link.href} className="text-text-faint hover:text-text text-[length:var(--text-xs)] transition-colors">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
 
           <div className="flex gap-4">
             <a href="https://www.linkedin.com/company/zawdabtc" target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-text transition-colors" aria-label="LinkedIn">

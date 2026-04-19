@@ -49,9 +49,24 @@ export default function LoginPage() {
           <h1 className="font-display font-bold text-[length:var(--text-xl)] leading-tight mb-4">
             Your compliance dashboard awaits.
           </h1>
-          <p className="text-text-on-dark/70 text-[length:var(--text-base)] leading-relaxed">
+          <p className="text-text-on-dark/70 text-[length:var(--text-base)] leading-relaxed mb-8">
             Track VARA enforcement, monitor regulatory changes, and keep your compliance roadmap on track.
           </p>
+          <div className="space-y-3">
+            {[
+              'Trusted by VASPs across VARA, ADGM, and CBB',
+              '$2.4M in potential fines identified for clients',
+              '150+ compliance assessments completed',
+            ].map((point) => (
+              <div key={point} className="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0" aria-hidden="true">
+                  <circle cx="8" cy="8" r="7" stroke="#D69828" strokeWidth="1.5" />
+                  <path d="M5 8l2 2 4-4" stroke="#D69828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="text-text-on-dark/60 text-[length:var(--text-sm)]">{point}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <p className="relative text-text-on-dark/40 text-[length:var(--text-xs)]">
           © {new Date().getFullYear()} <BrandName />. All rights reserved.

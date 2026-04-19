@@ -133,7 +133,16 @@ export function Sidebar({ activeNav, onNavigate, sidebarOpen, onClose, companyNa
           </div>
         </nav>
 
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border space-y-2">
+          <a
+            href="mailto:support@zawda.io"
+            className="flex items-center gap-2.5 px-4 py-2 rounded-xl text-text-muted hover:bg-bg-surface hover:text-text text-[length:var(--text-sm)] transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><circle cx="12" cy="17" r=".5" fill="currentColor" />
+            </svg>
+            <span>Get Support</span>
+          </a>
           <div className="flex items-center gap-3 px-4 py-2">
             <div className="w-8 h-8 rounded-full bg-gold-light flex items-center justify-center">
               <span className="text-gold font-bold text-[length:var(--text-xs)]">{initials}</span>

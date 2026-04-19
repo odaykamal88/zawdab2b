@@ -46,6 +46,20 @@ export function HeroSection() {
           </p>
         </div>
 
+        {/* Primary CTA */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 mb-2">
+          <Button
+            variant="primary"
+            onClick={() => setShowAssessment(true)}
+            className="text-[length:var(--text-base)] px-8 py-3"
+          >
+            Start Free Assessment &#8594;
+          </Button>
+          <a href="/register" className="text-text-muted text-[length:var(--text-sm)] hover:text-text transition-colors">
+            or request dashboard access
+          </a>
+        </div>
+
         {/* Assessment area */}
         <div id="assessment" className="mt-10">
           {showAssessment ? (
@@ -82,7 +96,7 @@ export function HeroSection() {
         <div className="flex flex-wrap justify-center gap-10 mt-12 pt-8 border-t border-border">
           {[
             { value: '150+', label: 'assessments completed' },
-            { value: '1', label: 'license secured for clients' },
+            { value: '8+', label: 'jurisdictions covered' },
             { value: '$2.4M', label: 'in potential fines mitigated' },
             weeklyRisk
               ? { value: weeklyRisk.stat, label: weeklyRisk.statLabel }

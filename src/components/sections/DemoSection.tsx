@@ -63,18 +63,70 @@ export function DemoSection() {
                 )}
               </>
             ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-bg-primary to-bg-surface">
-                <div className="w-20 h-20 rounded-full bg-gold flex items-center justify-center shadow-lg mb-6">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="white" className="ml-1">
-                    <polygon points="5,3 19,12 5,21" />
-                  </svg>
+              <div className="absolute inset-0 flex flex-col bg-bg-primary overflow-hidden">
+                {/* Mock sidebar */}
+                <div className="flex flex-1 overflow-hidden">
+                  <div className="hidden sm:flex flex-col w-44 bg-bg-dark border-r border-white/10 p-4 gap-3 shrink-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 rounded bg-gold/20 flex items-center justify-center">
+                        <div className="w-3 h-3 rounded-sm bg-gold" />
+                      </div>
+                      <div className="h-3 w-16 rounded bg-white/10" />
+                    </div>
+                    {['Dashboard', 'Licensing', 'Documents', 'Risk Map', 'Alerts'].map((item, i) => (
+                      <div key={item} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg ${i === 0 ? 'bg-gold/10' : ''}`}>
+                        <div className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-gold' : 'bg-white/20'}`} />
+                        <span className={`text-[10px] font-mono uppercase tracking-wider ${i === 0 ? 'text-gold' : 'text-white/40'}`}>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Mock main content */}
+                  <div className="flex-1 p-4 sm:p-6 bg-bg-surface overflow-hidden">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <div className="h-4 w-32 rounded bg-border mb-1.5" />
+                        <div className="h-2.5 w-48 rounded bg-border/60" />
+                      </div>
+                      <div className="h-8 w-28 rounded-lg bg-gold/20 border border-gold/30" />
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                      {[
+                        { label: 'VARA Status', value: 'In Review', color: 'text-yellow-600', bg: 'bg-yellow-50 border-yellow-200' },
+                        { label: 'Risk Score', value: '68 / 100', color: 'text-alert', bg: 'bg-red-50 border-red-200' },
+                        { label: 'Docs Ready', value: '11 / 16', color: 'text-gold', bg: 'bg-gold-light border-gold/20' },
+                        { label: 'Days to Deadline', value: '47', color: 'text-text', bg: 'bg-bg-primary border-border' },
+                      ].map((card) => (
+                        <div key={card.label} className={`rounded-xl p-3 border ${card.bg}`}>
+                          <p className="font-mono text-text-faint text-[9px] uppercase tracking-wider mb-1">{card.label}</p>
+                          <p className={`font-mono font-bold text-[length:var(--text-sm)] ${card.color}`}>{card.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="rounded-xl border border-border bg-bg-primary p-3">
+                      <div className="h-2.5 w-24 rounded bg-border mb-3" />
+                      <div className="space-y-2">
+                        {[80, 55, 35, 90, 60].map((w, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <div className="h-2 w-2 rounded-full bg-gold/40 shrink-0" />
+                            <div className="h-2 rounded-full bg-border" style={{ width: `${w}%` }} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="font-display font-bold text-text text-[length:var(--text-base)]">
-                  Dashboard demo coming soon
-                </p>
-                <p className="text-text-muted text-[length:var(--text-xs)] mt-2">
-                  Licensing roadmap &#183; Document vault &#183; Risk advisory &#183; Compliance alerts
-                </p>
+                {/* Overlay CTA */}
+                <div className="absolute inset-0 flex items-center justify-center bg-bg-primary/60 backdrop-blur-[2px]">
+                  <div className="text-center">
+                    <div className="w-16 h-16 rounded-full bg-gold flex items-center justify-center shadow-lg mb-4 mx-auto hover:scale-105 transition-transform">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="white" className="ml-1" aria-hidden="true">
+                        <polygon points="5,3 19,12 5,21" />
+                      </svg>
+                    </div>
+                    <p className="font-display font-bold text-text text-[length:var(--text-base)]">Dashboard preview</p>
+                    <p className="text-text-muted text-[length:var(--text-xs)] mt-1">Full walkthrough video coming soon</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
