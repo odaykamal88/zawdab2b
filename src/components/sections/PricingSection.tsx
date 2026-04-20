@@ -21,10 +21,10 @@ const INTELLIGENCE_PLANS = [
       'Regulator map — 16 jurisdictions',
       'Monthly compliance roundup',
     ],
-    cta: 'Get Started Free',
-    ctaHref: '',
+    cta: 'Join Free via Telegram or Email →',
+    ctaHref: '#brief',
     ctaVariant: 'ghost' as const,
-    emailCapture: true,
+    emailCapture: false,
   },
   {
     name: 'Professional',

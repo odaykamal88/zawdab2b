@@ -91,13 +91,26 @@ interface RiskResult {
   cta: { label: string; href: string; variant: 'primary' | 'outline' }
 }
 
-function getRisk(score: number): RiskResult {
+/** Map a jurisdiction label to the regulator names used in result copy. */
+function getRegulatorName(jurisdiction: string): string {
+  if (jurisdiction.includes('Bahrain') || jurisdiction.includes('CBB')) return 'CBB'
+  if (jurisdiction.includes('Saudi') || jurisdiction.includes('CMA')) return 'CMA'
+  if (jurisdiction.includes('Multiple')) return 'VARA, ADGM, and CBB'
+  return 'VARA and ADGM' // UAE default
+}
+
+function getRisk(score: number, jurisdiction: string): RiskResult {
+  const regulator = getRegulatorName(jurisdiction)
+  const isMulti = jurisdiction.includes('Multiple')
+  const isCBB = jurisdiction.includes('Bahrain') || jurisdiction.includes('CBB')
+  const isCMA = jurisdiction.includes('Saudi') || jurisdiction.includes('CMA')
+
   if (score <= 6) return {
     level: 'low', label: 'Low Risk', color: 'text-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200',
     headline: 'Your compliance posture is strong.',
-    message: 'You\'re ahead of most firms in MENA. Stay vigilant — VARA and ADGM update their frameworks quarterly, and the Travel Rule is now live. What passes audit today may not tomorrow.',
+    message: `You're ahead of most firms in MENA. Stay vigilant — ${regulator} ${isCMA ? 'is finalising its digital asset framework' : 'updates its frameworks quarterly'}, and the Travel Rule is now live. What passes audit today may not tomorrow.`,
     actions: [
-      'Monitor regulatory changes in real time with our Intelligence dashboard',
+      `Monitor regulatory changes from ${regulator} in real time with our Intelligence dashboard`,
       'Set up alerts for your specific jurisdictions and activities',
       'Track enforcement actions to anticipate what regulators audit next',
     ],
@@ -106,19 +119,27 @@ function getRisk(score: number): RiskResult {
   if (score <= 11) return {
     level: 'moderate', label: 'Moderate Risk', color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200',
     headline: 'You have gaps that regulators are actively auditing.',
-    message: 'VARA issued 19 cease-and-desist orders in Q4 2025 alone, and enforcement has continued into 2026 — firms with compliance gaps similar to yours were on those lists. The good news: these gaps are fixable. A 15-minute consultation can help you prioritize before the next audit round.',
+    message: isCBB
+      ? 'CBB has been increasing its scrutiny of licensed and unlicensed VASPs into 2026. Firms with compliance gaps similar to yours have faced formal inquiries. These gaps are fixable — a 15-minute consultation can help you prioritize before the next review cycle.'
+      : isCMA
+      ? 'The CMA is accelerating enforcement preparation ahead of its 2026 framework rollout. Firms establishing operations now must be ready from day one. A 15-minute consultation can help you get ahead of the requirements.'
+      : `VARA issued 19 cease-and-desist orders in Q4 2025 alone, and enforcement has continued into 2026${isMulti ? ' across multiple jurisdictions' : ''}. Firms with compliance gaps similar to yours were on those lists. The good news: these gaps are fixable. A 15-minute consultation can help you prioritize.`,
     actions: [
-      'Identify which gaps carry the highest enforcement risk',
+      'Identify which gaps carry the highest enforcement risk for your jurisdiction',
       'Close any remaining Travel Rule gaps — enforcement is live as of March 2026',
       'Review your license scope against your actual activities',
-      'Ensure your AML/KYC framework meets current regulator expectations',
+      `Ensure your AML/KYC framework meets ${regulator} expectations`,
     ],
     cta: { label: 'Book a Free Consultation →', href: CALENDLY_URL, variant: 'primary' },
   }
   if (score <= 17) return {
     level: 'high', label: 'High Risk', color: 'text-orange-600', bgColor: 'bg-orange-50', borderColor: 'border-orange-200',
     headline: 'Your organization is exposed to enforcement action.',
-    message: 'At this risk level, fines run up to AED 600K per violation. ADGM has already imposed $8.85M in penalties year-to-date, and 19 firms received VARA cease-and-desist orders in Q4 2025 alone. With the Travel Rule now live, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.',
+    message: isCBB
+      ? 'CBB penalties for unlicensed virtual asset activity can reach BHD 1M per violation, and the regulator has increased audit frequency in 2026. With the Travel Rule now live, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.'
+      : isCMA
+      ? 'The CMA has signaled zero tolerance for unlicensed digital asset activity ahead of its 2026 framework. Operating without the right structure exposes directors to personal liability. The cost of inaction far exceeds the cost of getting ready now.'
+      : `VARA issued 19 cease-and-desist orders in Q4 2025 alone, with per-violation fines reaching AED 600K. With the Travel Rule now live${isMulti ? ' across all your jurisdictions' : ''}, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.`,
     actions: [
       'Get a formal compliance gap assessment this month',
       'Finish Travel Rule implementation — enforcement is already active',
@@ -130,11 +151,15 @@ function getRisk(score: number): RiskResult {
   return {
     level: 'critical', label: 'Critical Risk', color: 'text-red-600', bgColor: 'bg-red-50', borderColor: 'border-red-200',
     headline: 'Immediate regulatory exposure.',
-    message: 'You are in the same position as the 19 firms that received VARA cease-and-desist orders in Q4 2025, and the firms hit by $8.85M in ADGM penalties this year. License suspension, AED 600K per-violation fines, and personal director liability are all on the table. This is not theoretical — it is happening to firms right now.',
+    message: isCBB
+      ? 'Your current position mirrors firms that have faced CBB enforcement action. License suspension, fines up to BHD 1M per violation, and personal director liability are all on the table. This is not theoretical — it is happening to firms right now.'
+      : isCMA
+      ? 'Operating without the correct structure ahead of the CMA\'s 2026 framework puts your entire market access at risk. Director liability and pre-emptive enforcement are live possibilities. Act before the framework locks in.'
+      : `You are in the same position as the 19 firms that received VARA cease-and-desist orders in Q4 2025. License suspension, AED 600K per-violation fines, and personal director liability are all on the table${isMulti ? ' across each jurisdiction you operate in' : ''}. This is not theoretical — it is happening to firms right now.`,
     actions: [
       'Stop any unlicensed virtual asset activity immediately',
       'Engage legal counsel to assess your exposure and director liability',
-      'File for the appropriate license before enforcement reaches you',
+      `File for the appropriate ${regulator} license before enforcement reaches you`,
       'Implement emergency AML/KYC and Travel Rule controls — even interim measures reduce risk',
       'Prepare a regulatory response plan in case of an enforcement inquiry',
     ],
@@ -145,16 +170,20 @@ function getRisk(score: number): RiskResult {
 export function ComplianceAssessment() {
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, number>>({})
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState('')
   const [showResult, setShowResult] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
 
   const totalSteps = QUESTIONS.length
   const progress = showResult ? 100 : (currentStep / totalSteps) * 100
 
-  function handleSelect(questionId: string, score: number) {
+  function handleSelect(questionId: string, score: number, optionLabel?: string) {
     const newAnswers = { ...answers, [questionId]: score }
     setAnswers(newAnswers)
     setInfoOpen(false)
+    if (questionId === 'jurisdiction' && optionLabel) {
+      setSelectedJurisdiction(optionLabel)
+    }
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1)
     } else {
@@ -165,11 +194,12 @@ export function ComplianceAssessment() {
   function reset() {
     setCurrentStep(0)
     setAnswers({})
+    setSelectedJurisdiction('')
     setShowResult(false)
   }
 
   const totalScore = Object.values(answers).reduce((sum, s) => sum + s, 0)
-  const risk = getRisk(totalScore)
+  const risk = getRisk(totalScore, selectedJurisdiction)
   const question = QUESTIONS[currentStep]
 
   return (
@@ -291,7 +321,7 @@ export function ComplianceAssessment() {
               {question.options.map((option) => (
                 <button
                   key={option.label}
-                  onClick={() => handleSelect(question.id, option.score)}
+                  onClick={() => handleSelect(question.id, option.score, option.label)}
                   className="text-left px-5 py-4 rounded-xl border border-border bg-bg-primary hover:border-gold hover:bg-gold-light transition-all cursor-pointer group"
                 >
                   <span className="text-text font-medium text-[length:var(--text-base)] group-hover:text-text">

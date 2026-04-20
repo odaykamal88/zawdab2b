@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { label: 'Assessment', href: '#assessment' },
   { label: 'Services', href: '#product' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Track Record', href: '#track-record' },
   { label: 'Brief', href: '#brief' },
 ]
 

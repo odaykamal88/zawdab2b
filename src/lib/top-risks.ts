@@ -46,15 +46,6 @@ export const TOP_RISKS: TopRisk[] = [
     source: 'vara.ae enforcement register',
   },
   {
-    stat: '$8.85M',
-    statLabel: 'in ADGM penalties YTD',
-    headline: 'ADGM FSRA has imposed $8.85M in penalties this year.',
-    body:
-      'The FSRA continues to pursue AML, market conduct, and unlicensed-activity cases. Audit-readiness is the single largest gap for mid-market firms.',
-    href: '#product',
-    source: 'adgm.com public notices',
-  },
-  {
     stat: 'AED 50M',
     statLabel: 'stablecoin issuer capital floor',
     headline: 'Stablecoin issuance now requires dual regulator approval.',
