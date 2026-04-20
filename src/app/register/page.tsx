@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useSignUp } from '@clerk/nextjs'
+import { useSignUp, useClerk } from '@clerk/nextjs'
 import { BrandName } from '@/components/ui/BrandName'
 import { BrandMark } from '@/components/ui/BrandMark'
 import { Button } from '@/components/ui/Button'
@@ -16,10 +16,32 @@ export default function RegisterPage() {
   )
 }
 
+function extractClerkMessage(err: unknown): string {
+  if (!err) return 'An unexpected error occurred. Please try again.'
+  if (typeof err === 'string') return err
+  if (typeof err === 'object') {
+    // { errors: [{ message: '...' }] } — Clerk API error array
+    if ('errors' in err && Array.isArray((err as { errors: unknown[] }).errors)) {
+      const first = (err as { errors: { message?: string }[] }).errors[0]
+      if (first?.message) return first.message
+    }
+    // { message: '...' } — standard Error or ClerkAPIError
+    if ('message' in err && typeof (err as { message: unknown }).message === 'string') {
+      return (err as { message: string }).message
+    }
+    // { longMessage: '...' }
+    if ('longMessage' in err && typeof (err as { longMessage: unknown }).longMessage === 'string') {
+      return (err as { longMessage: string }).longMessage
+    }
+  }
+  return 'Could not create account. Please try again.'
+}
+
 function RegisterForm() {
   const searchParams = useSearchParams()
   const { update } = useOnboarding()
   const { signUp } = useSignUp()
+  const clerk = useClerk()
   const [form, setForm] = useState({ name: '', email: '', company: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -39,39 +61,59 @@ function RegisterForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!signUp) return
     setError('')
     setLoading(true)
+
     try {
+      // Wait for Clerk to be ready (with a 10-second timeout)
+      if (!clerk.loaded) {
+        await Promise.race([
+          new Promise<void>((resolve) => {
+            const check = setInterval(() => {
+              if (clerk.loaded) { clearInterval(check); resolve() }
+            }, 100)
+          }),
+          new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error('Clerk is taking too long to load. Please refresh the page and try again.')), 10_000)
+          ),
+        ])
+      }
+
+      if (!signUp) {
+        setError('Authentication service is not available. Please refresh and try again.')
+        return
+      }
+
       const nameParts = form.name.trim().split(' ')
       const firstName = nameParts[0]
       const lastName = nameParts.slice(1).join(' ') || undefined
-      const { error: createError } = await signUp.create({
+
+      const createResult = await signUp.create({
         emailAddress: form.email,
         password: form.password,
         firstName,
         lastName,
       })
-      if (createError) {
-        setError(createError.message ?? 'Could not create account. Please try again.')
-        setLoading(false)
+
+      if (createResult?.error) {
+        console.error('[Register] signUp.create error:', createResult.error)
+        setError(extractClerkMessage(createResult.error))
         return
       }
-      const { error: sendError } = await signUp.verifications.sendEmailCode()
-      if (sendError) {
-        setError(sendError.message ?? 'Could not send verification code. Please try again.')
-        setLoading(false)
+
+      const sendResult = await signUp.verifications.sendEmailCode()
+      if (sendResult?.error) {
+        console.error('[Register] sendEmailCode error:', sendResult.error)
+        setError(extractClerkMessage(sendResult.error))
         return
       }
+
       // Save company to onboarding context for after verification
       update({ companyName: form.company, ...(plan ? { plan } : {}) })
       setVerifying(true)
     } catch (err: unknown) {
-      const msg =
-        err && typeof err === 'object' && 'errors' in err
-          ? (err as { errors: { message: string }[] }).errors[0]?.message
-          : 'Could not create account. Please try again.'
-      setError(msg ?? 'Could not create account. Please try again.')
+      console.error('[Register] unexpected error:', err)
+      setError(extractClerkMessage(err))
     } finally {
       setLoading(false)
     }
@@ -83,25 +125,27 @@ function RegisterForm() {
     setError('')
     setLoading(true)
     try {
-      const { error: verifyError } = await signUp.verifications.verifyEmailCode({ code })
-      if (verifyError) {
-        setError(verifyError.message ?? 'Invalid code. Please try again.')
-        setLoading(false)
+      const verifyResult = await signUp.verifications.verifyEmailCode({ code })
+      if (verifyResult?.error) {
+        console.error('[Register] verifyEmailCode error:', verifyResult.error)
+        setError(extractClerkMessage(verifyResult.error))
         return
       }
       if (signUp.status === 'complete') {
-        await signUp.finalize()
+        const finalizeResult = await signUp.finalize()
+        if (finalizeResult?.error) {
+          console.error('[Register] finalize error:', finalizeResult.error)
+          setError(extractClerkMessage(finalizeResult.error))
+          return
+        }
         window.location.href = '/onboarding'
       } else {
         setError('Verification could not be completed. Please try again.')
-        setLoading(false)
       }
     } catch (err: unknown) {
-      const msg =
-        err && typeof err === 'object' && 'errors' in err
-          ? (err as { errors: { message: string }[] }).errors[0]?.message
-          : 'Invalid code. Please try again.'
-      setError(msg ?? 'Invalid code. Please try again.')
+      console.error('[Register] verify unexpected error:', err)
+      setError(extractClerkMessage(err))
+    } finally {
       setLoading(false)
     }
   }
