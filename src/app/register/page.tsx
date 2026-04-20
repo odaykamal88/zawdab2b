@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useSignUp } from '@clerk/nextjs'
 import { BrandName } from '@/components/ui/BrandName'
 import { BrandMark } from '@/components/ui/BrandMark'
 import { Button } from '@/components/ui/Button'
@@ -18,8 +19,12 @@ export default function RegisterPage() {
 function RegisterForm() {
   const searchParams = useSearchParams()
   const { update } = useOnboarding()
+  const { signUp } = useSignUp()
   const [form, setForm] = useState({ name: '', email: '', company: '', password: '' })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [verifying, setVerifying] = useState(false)
+  const [code, setCode] = useState('')
 
   const plan = searchParams.get('plan')
 
@@ -32,61 +37,178 @@ function RegisterForm() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!signUp) return
+    setError('')
     setLoading(true)
-    // Save company name to onboarding context
-    update({ companyName: form.company })
-    setTimeout(() => {
-      window.location.href = '/onboarding'
-    }, 800)
+    try {
+      const nameParts = form.name.trim().split(' ')
+      const firstName = nameParts[0]
+      const lastName = nameParts.slice(1).join(' ') || undefined
+      const { error: createError } = await signUp.create({
+        emailAddress: form.email,
+        password: form.password,
+        firstName,
+        lastName,
+      })
+      if (createError) {
+        setError(createError.message ?? 'Could not create account. Please try again.')
+        setLoading(false)
+        return
+      }
+      const { error: sendError } = await signUp.verifications.sendEmailCode()
+      if (sendError) {
+        setError(sendError.message ?? 'Could not send verification code. Please try again.')
+        setLoading(false)
+        return
+      }
+      // Save company to onboarding context for after verification
+      update({ companyName: form.company, ...(plan ? { plan } : {}) })
+      setVerifying(true)
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'errors' in err
+          ? (err as { errors: { message: string }[] }).errors[0]?.message
+          : 'Could not create account. Please try again.'
+      setError(msg ?? 'Could not create account. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleVerify(e: React.FormEvent) {
+    e.preventDefault()
+    if (!signUp) return
+    setError('')
+    setLoading(true)
+    try {
+      const { error: verifyError } = await signUp.verifications.verifyEmailCode({ code })
+      if (verifyError) {
+        setError(verifyError.message ?? 'Invalid code. Please try again.')
+        setLoading(false)
+        return
+      }
+      if (signUp.status === 'complete') {
+        await signUp.finalize()
+        window.location.href = '/onboarding'
+      } else {
+        setError('Verification could not be completed. Please try again.')
+        setLoading(false)
+      }
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'errors' in err
+          ? (err as { errors: { message: string }[] }).errors[0]?.message
+          : 'Invalid code. Please try again.'
+      setError(msg ?? 'Invalid code. Please try again.')
+      setLoading(false)
+    }
+  }
+
+  const leftPanel = (
+    <div className="relative hidden lg:flex lg:w-1/2 bg-bg-dark text-text-on-dark flex-col justify-between p-12 overflow-hidden">
+      <div className="absolute inset-0 bg-zawda-pattern opacity-[0.06] pointer-events-none" aria-hidden="true" />
+      <div className="relative">
+        <a href="/" className="inline-flex items-center gap-3">
+          <BrandMark size={32} className="text-gold shrink-0" />
+          <BrandName className="font-display font-bold text-[length:var(--text-lg)] tracking-[0.08em] text-white uppercase" />
+        </a>
+      </div>
+      <div className="relative max-w-md">
+        <p className="font-mono text-gold uppercase tracking-widest text-[length:var(--text-xs)] mb-4">
+          {plan === 'navigator' ? 'Licensing Navigator' : 'Regulatory Intelligence'}
+        </p>
+        <h1 className="font-display font-bold text-[length:var(--text-xl)] leading-tight mb-4">
+          {plan === 'navigator'
+            ? 'Get licensed without the noise.'
+            : 'Stay ahead of every MENA digital asset regulation.'}
+        </h1>
+        <p className="text-text-on-dark/70 text-[length:var(--text-base)] leading-relaxed">
+          {plan === 'navigator'
+            ? 'Clear licensing guidance, document tracking, and risk warnings — built for the companies actually going through the process.'
+            : 'Join the compliance teams already using Zawda to track enforcement actions and regulatory changes across 7 MENA jurisdictions.'}
+        </p>
+        <div className="mt-10 space-y-4">
+          {[
+            'Real-time alerts on VARA, ADGM, CBB enforcement actions',
+            'Licensing roadmap with hidden risk warnings per jurisdiction',
+            'Document vault with audit-ready tracking',
+          ].map((point) => (
+            <div key={point} className="flex items-start gap-3">
+              <span className="text-gold mt-0.5">&#10003;</span>
+              <span className="text-text-on-dark/80 text-[length:var(--text-sm)]">{point}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="relative text-text-on-dark/40 text-[length:var(--text-xs)]">
+        © {new Date().getFullYear()} <BrandName />. All rights reserved.
+      </p>
+    </div>
+  )
+
+  if (verifying) {
+    return (
+      <div className="min-h-screen flex">
+        {leftPanel}
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-bg-primary">
+          <div className="w-full max-w-md">
+            <div className="lg:hidden mb-8">
+              <a href="/" className="inline-flex items-center gap-2.5">
+                <BrandMark size={28} className="text-gold shrink-0" />
+                <BrandName className="font-display font-bold text-[length:var(--text-lg)] tracking-[0.08em] text-text uppercase" />
+              </a>
+            </div>
+            <h2 className="font-display font-bold text-text text-[length:var(--text-xl)] mb-2">
+              Check your email
+            </h2>
+            <p className="text-text-muted text-[length:var(--text-sm)] mb-8">
+              We sent a 6-digit code to <strong>{form.email}</strong>. Enter it below to verify your account.
+            </p>
+            {error && (
+              <div className="mb-5 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[length:var(--text-sm)]">
+                {error}
+              </div>
+            )}
+            <form onSubmit={handleVerify} className="space-y-5">
+              <div>
+                <label htmlFor="code" className="block text-text text-[length:var(--text-sm)] font-medium mb-1.5">
+                  Verification code
+                </label>
+                <input
+                  id="code" name="code" type="text" required
+                  value={code} onChange={(e) => setCode(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-bg-surface text-text text-[length:var(--text-sm)] placeholder:text-text-faint focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors tracking-widest text-center text-lg"
+                  placeholder="123456"
+                  maxLength={6}
+                />
+              </div>
+              <Button type="submit" variant="primary" className="w-full text-[length:var(--text-sm)]" disabled={loading}>
+                {loading ? 'Verifying…' : 'Verify Email'}
+              </Button>
+            </form>
+            <p className="text-text-muted text-[length:var(--text-xs)] mt-6 text-center">
+              Didn&apos;t receive it?{' '}
+              <button
+                type="button"
+                className="text-gold hover:underline font-medium bg-transparent border-none cursor-pointer"
+                onClick={async () => {
+                  if (signUp) await signUp.verifications.sendEmailCode()
+                }}
+              >
+                Resend code
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen flex">
-      {/* Left panel — branding */}
-      <div className="relative hidden lg:flex lg:w-1/2 bg-bg-dark text-text-on-dark flex-col justify-between p-12 overflow-hidden">
-        <div className="absolute inset-0 bg-zawda-pattern opacity-[0.06] pointer-events-none" aria-hidden="true" />
-        <div className="relative">
-          <a href="/" className="inline-flex items-center gap-3">
-            <BrandMark size={32} className="text-gold shrink-0" />
-            <BrandName className="font-display font-bold text-[length:var(--text-lg)] tracking-[0.08em] text-white uppercase" />
-          </a>
-        </div>
-        <div className="relative max-w-md">
-          <p className="font-mono text-gold uppercase tracking-widest text-[length:var(--text-xs)] mb-4">
-            {plan === 'navigator' ? 'Licensing Navigator' : 'Regulatory Intelligence'}
-          </p>
-          <h1 className="font-display font-bold text-[length:var(--text-xl)] leading-tight mb-4">
-            {plan === 'navigator'
-              ? 'Get licensed without the noise.'
-              : 'Stay ahead of every MENA digital asset regulation.'}
-          </h1>
-          <p className="text-text-on-dark/70 text-[length:var(--text-base)] leading-relaxed">
-            {plan === 'navigator'
-              ? 'Clear licensing guidance, document tracking, and risk warnings — built for the companies actually going through the process.'
-              : 'Join the compliance teams already using Zawda to track enforcement actions and regulatory changes across 7 MENA jurisdictions.'}
-          </p>
-
-          <div className="mt-10 space-y-4">
-            <div className="flex items-start gap-3">
-              <span className="text-gold mt-0.5">&#10003;</span>
-              <span className="text-text-on-dark/80 text-[length:var(--text-sm)]">Real-time alerts on VARA, ADGM, CBB enforcement actions</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-gold mt-0.5">&#10003;</span>
-              <span className="text-text-on-dark/80 text-[length:var(--text-sm)]">Licensing roadmap with hidden risk warnings per jurisdiction</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-gold mt-0.5">&#10003;</span>
-              <span className="text-text-on-dark/80 text-[length:var(--text-sm)]">Document vault with audit-ready tracking</span>
-            </div>
-          </div>
-        </div>
-        <p className="relative text-text-on-dark/40 text-[length:var(--text-xs)]">
-          © {new Date().getFullYear()} <BrandName />. All rights reserved.
-        </p>
-      </div>
+      {leftPanel}
 
       {/* Right panel — form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-bg-primary">
@@ -110,6 +232,12 @@ function RegisterForm() {
             <span className="text-green-600 text-[length:var(--text-sm)]">&#10003;</span>
             <span className="text-green-700 text-[length:var(--text-xs)] font-medium">14-day free trial &middot; Cancel anytime &middot; No setup fees</span>
           </div>
+
+          {error && (
+            <div className="mb-5 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[length:var(--text-sm)]">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

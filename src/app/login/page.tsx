@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSignIn } from '@clerk/nextjs'
 import { BrandName } from '@/components/ui/BrandName'
 import { BrandMark } from '@/components/ui/BrandMark'
 import { Button } from '@/components/ui/Button'
@@ -8,6 +9,7 @@ import { useOnboarding } from '@/lib/onboarding-context'
 
 export default function LoginPage() {
   const { isComplete, isLoaded } = useOnboarding()
+  const { signIn } = useSignIn()
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -16,19 +18,36 @@ export default function LoginPage() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!signIn) return
     setError('')
     setLoading(true)
-    // TODO: integrate with auth backend
-    setTimeout(() => {
-      // Route based on onboarding completion status
-      if (isLoaded && isComplete) {
-        window.location.href = '/dashboard'
-      } else {
-        window.location.href = '/onboarding'
+    try {
+      const { error: createError } = await signIn.create({
+        identifier: form.email,
+        password: form.password,
+      })
+      if (createError) {
+        setError(createError.message ?? 'Invalid email or password.')
+        setLoading(false)
+        return
       }
-    }, 1200)
+      if (signIn.status === 'complete') {
+        await signIn.finalize()
+        window.location.href = isLoaded && isComplete ? '/dashboard' : '/onboarding'
+      } else {
+        setError('Sign-in could not be completed. Please try again.')
+        setLoading(false)
+      }
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'errors' in err
+          ? (err as { errors: { message: string }[] }).errors[0]?.message
+          : 'Invalid email or password.'
+      setError(msg ?? 'Invalid email or password.')
+      setLoading(false)
+    }
   }
 
   return (
