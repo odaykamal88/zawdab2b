@@ -25,8 +25,10 @@ const VALID_SEVERITIES: IncidentSeverity[] = ['critical', 'high', 'medium', 'low
 const VALID_STATUSES: IncidentStatus[] = ['open', 'investigating', 'notified', 'resolved']
 
 export async function GET(_req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const incidents = await listIncidents()
   const enriched = incidents.map((i) => ({
@@ -45,8 +47,10 @@ export async function GET(_req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const id = req.nextUrl.searchParams.get('id')
   const action = req.nextUrl.searchParams.get('action')
@@ -121,8 +125,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const id = req.nextUrl.searchParams.get('id')
   if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 })

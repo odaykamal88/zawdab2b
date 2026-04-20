@@ -13,8 +13,10 @@ import { writeAuditLog, extractRequestMeta } from '@/lib/audit-log'
 const VALID_STATUSES: DsarStatus[] = ['open', 'in_progress', 'completed', 'rejected']
 
 export async function GET(_req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const all = await readDsarRequests()
   const enriched = all.map((r) => ({
@@ -35,8 +37,10 @@ export async function GET(_req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const id = req.nextUrl.searchParams.get('id')
   if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 })

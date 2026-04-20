@@ -13,8 +13,10 @@ import { readAuditLog, auditLogLength } from '@/lib/audit-log'
 const MAX_LIMIT = 500
 
 export async function GET(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const params = req.nextUrl.searchParams
   const limit = Math.min(parseInt(params.get('limit') ?? '200', 10) || 200, MAX_LIMIT)
