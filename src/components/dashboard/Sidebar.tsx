@@ -2,6 +2,7 @@
 
 import { BrandName } from '@/components/ui/BrandName'
 import { BrandMark } from '@/components/ui/BrandMark'
+import { SubscriptionBadge } from '@/components/ui/SubscriptionBadge'
 
 export interface SidebarItem {
   id: string
@@ -125,15 +126,24 @@ export function Sidebar({ activeNav, onNavigate, sidebarOpen, onClose, companyNa
               Enforcement tracking, document review, audit prep, and advisory sessions.
             </p>
             <a
-              href="/#pricing"
+              href="/checkout?plan=professional-799"
               className="inline-block mt-3 px-4 py-1.5 bg-gold text-white text-[length:var(--text-xs)] font-medium rounded-lg hover:brightness-110 transition-all"
             >
-              View Plans &rarr;
+              Upgrade Now &rarr;
             </a>
           </div>
         </nav>
 
         <div className="p-4 border-t border-border space-y-2">
+          <a
+            href="/billing"
+            className="flex items-center gap-2.5 px-4 py-2 rounded-xl text-text-muted hover:bg-bg-surface hover:text-text text-[length:var(--text-sm)] transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            <span>Billing</span>
+          </a>
           <a
             href="mailto:support@zawda.io"
             className="flex items-center gap-2.5 px-4 py-2 rounded-xl text-text-muted hover:bg-bg-surface hover:text-text text-[length:var(--text-sm)] transition-colors"
@@ -144,12 +154,14 @@ export function Sidebar({ activeNav, onNavigate, sidebarOpen, onClose, companyNa
             <span>Get Support</span>
           </a>
           <div className="flex items-center gap-3 px-4 py-2">
-            <div className="w-8 h-8 rounded-full bg-gold-light flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-gold-light flex items-center justify-center shrink-0">
               <span className="text-gold font-bold text-[length:var(--text-xs)]">{initials}</span>
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="text-text text-[length:var(--text-sm)] font-medium truncate">{companyName || 'Your Company'}</p>
-              <p className="text-text-faint text-[length:var(--text-xs)]">{STAGE_LABELS[licensingStage ?? ''] ?? 'Advisory Plan'}</p>
+              <div className="mt-0.5">
+                <SubscriptionBadge />
+              </div>
             </div>
           </div>
         </div>

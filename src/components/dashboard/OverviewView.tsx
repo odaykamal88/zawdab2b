@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useOnboarding } from '@/lib/onboarding-context'
+import { useSubscription } from '@/hooks/useSubscription'
 import { JURISDICTIONS } from '@/lib/licensing-data'
 import { BrandName } from '@/components/ui/BrandName'
 
@@ -170,6 +171,7 @@ function getGreeting(): string {
 
 export function OverviewView({ onNavigate }: { onNavigate: (id: string) => void }) {
   const { data: onboardingData, update } = useOnboarding()
+  const { subscription } = useSubscription()
   const [editingActivities, setEditingActivities] = useState(false)
 
   const stage = onboardingData?.licensingStage ?? 'exploring'
@@ -231,6 +233,26 @@ export function OverviewView({ onNavigate }: { onNavigate: (id: string) => void 
           )}
         </p>
       </div>
+
+      {/* Plan upgrade banner — shown for free plan users */}
+      {subscription && subscription.plan === 'watchlist-free' && (
+        <div className="bg-gradient-to-br from-gold/5 via-bg-primary to-gold/5 border border-gold/20 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="font-display font-bold text-text text-[length:var(--text-sm)]">
+              You&apos;re on the Free plan
+            </p>
+            <p className="text-text-muted text-[length:var(--text-xs)] mt-0.5 leading-relaxed max-w-sm">
+              Upgrade to unlock real-time alerts, risk screening, travel rule tools, and the full compliance dashboard.
+            </p>
+          </div>
+          <a
+            href="/checkout?plan=professional-799"
+            className="shrink-0 px-5 py-2 bg-gold text-white text-[length:var(--text-xs)] font-medium rounded-lg hover:brightness-110 transition-all whitespace-nowrap"
+          >
+            Upgrade to Professional &rarr;
+          </a>
+        </div>
+      )}
 
       {/* Getting Started Checklist — shown for new users */}
       {isNewUser && (
