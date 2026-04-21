@@ -11,6 +11,7 @@
 import { createHmac } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { writeAuditLog, type AuditEventType } from '@/lib/audit-log'
+import { getSubscription, setSubscription } from '@/lib/subscription'
 
 function verifyClerkWebhook(
   rawBody: string,
@@ -86,6 +87,21 @@ export async function POST(req: NextRequest) {
       data.user_id ?? data.id ?? 'unknown',
     )
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'clerk'
+
+    // On new user creation: seed a free-plan subscription record so the
+    // dashboard can gate features immediately without waiting for a Chargebee event.
+    if (eventType === 'user.created' && userId !== 'unknown') {
+      const existing = await getSubscription(userId)
+      if (!existing) {
+        await setSubscription({
+          clerkId: userId,
+          plan: 'watchlist-free',
+          status: 'free',
+          chargebeeCustomerId: '',
+          updatedAt: new Date().toISOString(),
+        })
+      }
+    }
 
     await writeAuditLog({
       eventType: auditType,
