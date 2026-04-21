@@ -31,6 +31,16 @@ export type AuditEventType =
   | 'incident.updated'
   | 'alert.dispatched'
   | 'alert.sla_breach'
+  | 'payment.subscription_created'
+  | 'payment.subscription_renewed'
+  | 'payment.subscription_cancelled'
+  | 'payment.subscription_reactivated'
+  | 'payment.plan_changed'
+  | 'payment.trial_started'
+  | 'payment.trial_ended'
+  | 'payment.failed'
+  | 'payment.invoice_generated'
+  | 'payment.refund_issued'
 
 export interface AuditEvent {
   id: string
