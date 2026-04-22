@@ -13,6 +13,7 @@ export interface JurisdictionRisk {
   title: string
   severity: 'critical' | 'high' | 'medium'
   description: string
+  sourceUrl?: string
 }
 
 export interface JurisdictionData {
@@ -71,6 +72,7 @@ export const JURISDICTIONS: JurisdictionData[] = [
         title: 'Stablecoin issuance requires dual regulatory approval',
         severity: 'critical',
         description: 'VARA regulates virtual asset activities, but AED-pegged stablecoins also fall under Central Bank of the UAE (CBUAE) jurisdiction. Issuers need approval from both. CBUAE requires 1:1 fiat reserves in segregated UAE bank accounts with independent monthly attestation. The minimum capital for issuance is AED 50M — the highest of any VARA activity. Operating without dual approval risks enforcement from both regulators simultaneously.',
+        sourceUrl: 'https://www.vara.ae/en/regulations',
       },
       {
         title: 'Stablecoin reserve management under constant scrutiny',
@@ -192,11 +194,13 @@ export const JURISDICTIONS: JurisdictionData[] = [
         title: '$8.85M in penalties already imposed',
         severity: 'critical',
         description: 'ADGM has demonstrated willingness to impose large financial penalties. Public censures are published on the ADGM website, creating permanent reputational damage in a small market where everyone knows everyone.',
+        sourceUrl: 'https://www.adgm.com/media/announcements/enforcement-decisions',
       },
       {
         title: 'Enhanced capital requirements with no phase-in',
         severity: 'high',
         description: 'FSRA updated capital requirements for digital asset firms in June 2025. These apply immediately to existing licensees — there is no grandfathering period. Firms that cannot meet the new requirements face license conditions or withdrawal.',
+        sourceUrl: 'https://www.adgm.com/setting-up/digital-assets',
       },
       {
         title: 'Fiat-Referenced Token (FRT) framework is the strictest in the region',

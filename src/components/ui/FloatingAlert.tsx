@@ -87,7 +87,14 @@ export function FloatingAlert() {
         {risk.body}
       </p>
       <p className="text-text-faint text-[length:var(--text-xs)] font-mono mb-4">
-        Source: {risk.source}
+        Source:{' '}
+        {risk.sourceUrl ? (
+          <a href={risk.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-text-muted">
+            {risk.source}
+          </a>
+        ) : (
+          risk.source
+        )}
       </p>
       <div className="flex items-center gap-2">
         <a

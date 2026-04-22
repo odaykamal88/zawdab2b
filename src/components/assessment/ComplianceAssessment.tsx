@@ -18,7 +18,7 @@ const QUESTIONS: Question[] = [
     text: 'Where does your company operate or plan to operate?',
     subtitle: 'Each jurisdiction has different licensing requirements, capital thresholds, and enforcement approaches.',
     options: [
-      { label: 'UAE (VARA / ADGM)', sublabel: 'Strictest enforcement in MENA — 19 firms ceased in Q4 2025', score: 3 },
+      { label: 'UAE (VARA / ADGM)', sublabel: 'Strictest enforcement in MENA — active enforcement against unlicensed firms', score: 3 },
       { label: 'Bahrain (CBB)', sublabel: 'Sandbox-friendly, lower capital thresholds', score: 2 },
       { label: 'Saudi Arabia (CMA)', sublabel: 'Emerging framework — draft rules expected 2026', score: 1 },
       { label: 'Multiple jurisdictions', sublabel: 'Each requires a separate license — no passporting', score: 4 },
@@ -123,7 +123,7 @@ function getRisk(score: number, jurisdiction: string): RiskResult {
       ? 'CBB has been increasing its scrutiny of licensed and unlicensed VASPs into 2026. Firms with compliance gaps similar to yours have faced formal inquiries. These gaps are fixable — a 15-minute consultation can help you prioritize before the next review cycle.'
       : isCMA
       ? 'The CMA is accelerating enforcement preparation ahead of its 2026 framework rollout. Firms establishing operations now must be ready from day one. A 15-minute consultation can help you get ahead of the requirements.'
-      : `VARA issued 19 cease-and-desist orders in Q4 2025 alone, and enforcement has continued into 2026${isMulti ? ' across multiple jurisdictions' : ''}. Firms with compliance gaps similar to yours were on those lists. The good news: these gaps are fixable. A 15-minute consultation can help you prioritize.`,
+      : `VARA and ADGM are actively enforcing against firms with compliance gaps${isMulti ? ' across multiple jurisdictions' : ''}. Firms in similar positions have faced formal enforcement action. The good news: these gaps are fixable. A 15-minute consultation can help you prioritize.`,
     actions: [
       'Identify which gaps carry the highest enforcement risk for your jurisdiction',
       'Close any remaining Travel Rule gaps — enforcement is live as of March 2026',
@@ -139,7 +139,7 @@ function getRisk(score: number, jurisdiction: string): RiskResult {
       ? 'CBB penalties for unlicensed virtual asset activity can reach BHD 1M per violation, and the regulator has increased audit frequency in 2026. With the Travel Rule now live, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.'
       : isCMA
       ? 'The CMA has signaled zero tolerance for unlicensed digital asset activity ahead of its 2026 framework. Operating without the right structure exposes directors to personal liability. The cost of inaction far exceeds the cost of getting ready now.'
-      : `VARA issued 19 cease-and-desist orders in Q4 2025 alone, with per-violation fines reaching AED 600K. With the Travel Rule now live${isMulti ? ' across all your jurisdictions' : ''}, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.`,
+      : `VARA and ADGM are actively enforcing, with per-violation fines reaching AED 600K under VARA. With the Travel Rule now live${isMulti ? ' across all your jurisdictions' : ''}, these gaps are license-threatening. The cost of inaction far exceeds the cost of compliance.`,
     actions: [
       'Get a formal compliance gap assessment this month',
       'Finish Travel Rule implementation — enforcement is already active',
@@ -155,7 +155,7 @@ function getRisk(score: number, jurisdiction: string): RiskResult {
       ? 'Your current position mirrors firms that have faced CBB enforcement action. License suspension, fines up to BHD 1M per violation, and personal director liability are all on the table. This is not theoretical — it is happening to firms right now.'
       : isCMA
       ? 'Operating without the correct structure ahead of the CMA\'s 2026 framework puts your entire market access at risk. Director liability and pre-emptive enforcement are live possibilities. Act before the framework locks in.'
-      : `You are in the same position as the 19 firms that received VARA cease-and-desist orders in Q4 2025. License suspension, AED 600K per-violation fines, and personal director liability are all on the table${isMulti ? ' across each jurisdiction you operate in' : ''}. This is not theoretical — it is happening to firms right now.`,
+      : `Your current position mirrors firms that have received VARA cease-and-desist orders. License suspension, AED 600K per-violation fines, and personal director liability are all on the table${isMulti ? ' across each jurisdiction you operate in' : ''}. This is not theoretical — it is happening to firms right now.`,
     actions: [
       'Stop any unlicensed virtual asset activity immediately',
       'Engage legal counsel to assess your exposure and director liability',

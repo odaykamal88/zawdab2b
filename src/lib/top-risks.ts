@@ -20,6 +20,8 @@ export interface TopRisk {
   href: string
   /** Source citation rendered in small text. */
   source: string
+  /** Primary source URL — makes the citation clickable. */
+  sourceUrl?: string
 }
 
 /**
@@ -35,15 +37,17 @@ export const TOP_RISKS: TopRisk[] = [
       'As of March 2026, VASPs must transmit originator and beneficiary data on qualifying transfers. Non-compliant firms face license suspension.',
     href: '#assessment',
     source: 'FATF Recommendation 16',
+    sourceUrl: 'https://www.fatf-gafi.org/en/topics/fatf-recommendations.html',
   },
   {
-    stat: '19',
-    statLabel: 'cease-and-desist orders (Q4 2025)',
-    headline: 'VARA issued 19 cease-and-desist orders in Q4 2025.',
+    stat: 'AED 600K',
+    statLabel: 'max per-violation penalty (VARA)',
+    headline: 'VARA actively enforces against unlicensed virtual asset firms.',
     body:
-      'Fines of up to AED 600K per violation were imposed on unlicensed firms operating in the UAE. Enforcement has continued into 2026.',
-    href: '#pain',
-    source: 'vara.ae enforcement register',
+      'Cease-and-desist orders and fines of up to AED 600K per violation are imposed on unlicensed firms operating in the UAE. Enforcement is ongoing into 2026.',
+    href: '#assessment',
+    source: 'VARA Enforcement Register',
+    sourceUrl: 'https://www.vara.ae/en/enforcement-actions',
   },
   {
     stat: 'AED 50M',
@@ -51,8 +55,9 @@ export const TOP_RISKS: TopRisk[] = [
     headline: 'Stablecoin issuance now requires dual regulator approval.',
     body:
       'VARA + CBUAE jointly gate AED-denominated stablecoin issuance, with a AED 50M capital floor, 1:1 HQLA reserves, and monthly attestation.',
-    href: '#product',
+    href: '#assessment',
     source: 'CBUAE Payment Token Services Regulation',
+    sourceUrl: 'https://www.centralbank.ae/en/regulations',
   },
   {
     stat: 'Q2 2026',
@@ -60,8 +65,9 @@ export const TOP_RISKS: TopRisk[] = [
     headline: 'Saudi CMA draft digital asset rules expected Q2 2026.',
     body:
       'Firms planning KSA market entry should begin readiness now — consultation windows historically close within 8 weeks of publication.',
-    href: '#product',
+    href: '#assessment',
     source: 'CMA Strategic Plan 2024–2026',
+    sourceUrl: 'https://cma.org.sa/en/Pages/default.aspx',
   },
 ]
 

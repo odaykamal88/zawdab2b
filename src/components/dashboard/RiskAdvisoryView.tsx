@@ -48,28 +48,29 @@ interface PenaltyCategory {
   violation: string
   penalty: string
   severity: 'critical' | 'high' | 'medium'
+  sourceUrl?: string
 }
 
 const JURISDICTION_PENALTIES: Record<string, PenaltyCategory[]> = {
   vara: [
-    { violation: 'Operating without license', penalty: 'Up to AED 10M (~$2.7M) + cease-and-desist', severity: 'critical' },
-    { violation: 'AML/CFT violations', penalty: 'Up to AED 5M (~$1.36M) per violation', severity: 'critical' },
-    { violation: 'Marketing without license', penalty: 'Up to AED 600,000 (~$163K) + criminal referral', severity: 'high' },
-    { violation: 'Breach of licensing conditions', penalty: 'AED 100K\u20131M per breach', severity: 'high' },
-    { violation: 'Late compliance returns', penalty: 'Supervisory escalation, potential license suspension', severity: 'medium' },
+    { violation: 'Operating without license', penalty: 'Up to AED 10M (~$2.7M) + cease-and-desist', severity: 'critical', sourceUrl: 'https://www.vara.ae/en/regulations' },
+    { violation: 'AML/CFT violations', penalty: 'Up to AED 5M (~$1.36M) per violation', severity: 'critical', sourceUrl: 'https://www.vara.ae/en/regulations' },
+    { violation: 'Marketing without license', penalty: 'Up to AED 600,000 (~$163K) + criminal referral', severity: 'high', sourceUrl: 'https://www.vara.ae/en/regulations' },
+    { violation: 'Breach of licensing conditions', penalty: 'AED 100K\u20131M per breach', severity: 'high', sourceUrl: 'https://www.vara.ae/en/regulations' },
+    { violation: 'Late compliance returns', penalty: 'Supervisory escalation, potential license suspension', severity: 'medium', sourceUrl: 'https://www.vara.ae/en/regulations' },
   ],
   adgm: [
-    { violation: 'Market misconduct', penalty: 'Up to $25M or 3x profits gained', severity: 'critical' },
-    { violation: 'AML/CFT violations', penalty: 'Censure + unlimited financial penalty', severity: 'critical' },
-    { violation: 'Non-disclosure of material changes', penalty: 'Up to $5M', severity: 'high' },
-    { violation: 'Failure to maintain capital', penalty: 'Immediate license conditions or revocation', severity: 'high' },
-    { violation: 'Total penalties imposed to date', penalty: '$8.85M cumulative', severity: 'medium' },
+    { violation: 'Market misconduct', penalty: 'Up to $25M or 3x profits gained', severity: 'critical', sourceUrl: 'https://www.adgm.com/setting-up/financial-services/regulations' },
+    { violation: 'AML/CFT violations', penalty: 'Censure + unlimited financial penalty', severity: 'critical', sourceUrl: 'https://www.adgm.com/setting-up/financial-services/regulations' },
+    { violation: 'Non-disclosure of material changes', penalty: 'Up to $5M', severity: 'high', sourceUrl: 'https://www.adgm.com/setting-up/financial-services/regulations' },
+    { violation: 'Failure to maintain capital', penalty: 'Immediate license conditions or revocation', severity: 'high', sourceUrl: 'https://www.adgm.com/setting-up/financial-services/regulations' },
+    { violation: 'Total penalties imposed to date', penalty: '$8.85M cumulative', severity: 'medium', sourceUrl: 'https://www.adgm.com/media/announcements/enforcement-decisions' },
   ],
   cbb: [
-    { violation: 'Operating without authorization', penalty: 'Criminal referral + BHD 1M (~$2.65M)', severity: 'critical' },
-    { violation: 'AML/CFT violations', penalty: 'BHD 100K\u2013500K (~$265K\u2013$1.3M) per violation', severity: 'critical' },
-    { violation: 'Sandbox violations', penalty: 'Immediate exit from sandbox program', severity: 'high' },
-    { violation: 'Late filings', penalty: 'BHD 10K (~$26.5K) per day of delay', severity: 'medium' },
+    { violation: 'Operating without authorization', penalty: 'Criminal referral + BHD 1M (~$2.65M)', severity: 'critical', sourceUrl: 'https://www.cbb.gov.bh/crypto-assets/' },
+    { violation: 'AML/CFT violations', penalty: 'BHD 100K\u2013500K (~$265K\u2013$1.3M) per violation', severity: 'critical', sourceUrl: 'https://www.cbb.gov.bh/crypto-assets/' },
+    { violation: 'Sandbox violations', penalty: 'Immediate exit from sandbox program', severity: 'high', sourceUrl: 'https://www.cbb.gov.bh/crypto-assets/' },
+    { violation: 'Late filings', penalty: 'BHD 10K (~$26.5K) per day of delay', severity: 'medium', sourceUrl: 'https://www.cbb.gov.bh/crypto-assets/' },
   ],
 }
 
@@ -138,7 +139,13 @@ export function RiskAdvisoryView({ jurisdictions }: { jurisdictions?: string[] }
                   </span>
                   <span className="text-text text-[length:var(--text-sm)]">{p.violation}</span>
                 </div>
-                <span className="font-mono text-text font-bold text-[length:var(--text-sm)] shrink-0">{p.penalty}</span>
+                <span className="font-mono text-text font-bold text-[length:var(--text-sm)] shrink-0">
+                  {p.sourceUrl ? (
+                    <a href={p.sourceUrl} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors" title="Source">
+                      {p.penalty} <span className="text-text-muted font-normal text-[length:var(--text-xs)]">↗</span>
+                    </a>
+                  ) : p.penalty}
+                </span>
               </div>
             )
           })}
