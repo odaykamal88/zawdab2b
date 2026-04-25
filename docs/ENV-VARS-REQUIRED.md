@@ -5,6 +5,17 @@ Never commit `.env*` files.
 
 ---
 
+## Postgres
+
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | Primary Postgres connection string used by the app runtime. For Neon on Vercel, prefer the pooled/serverless application URL. |
+| `DATABASE_URL_DIRECT` | Direct Postgres connection string used by migration and admin tooling. If you only have one connection string initially, you can temporarily set this to the same value as `DATABASE_URL`. |
+
+Used by: `src/db/client.ts` and `drizzle.config.ts` for the Phase 0 Postgres scaffold.
+
+---
+
 ## Upstash Redis
 
 | Variable | Description |
