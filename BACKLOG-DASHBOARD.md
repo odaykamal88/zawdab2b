@@ -33,11 +33,11 @@ A secure, gated workspace for companies going through the digital asset licensin
 
 ## Security Messaging (Critical)
 Users will be putting sensitive pre-license materials in here. Must communicate:
-- "Documents encrypted with AES-256 at rest"
-- "Zero-knowledge architecture — Zawda cannot read your documents"
-- "SOC 2 Type II compliance roadmap" (can say "in progress" for MVP)
-- "Data residency: UAE/EU servers only"
-- "GDPR and UAE PDPL compliant"
+- "Documents encrypted with AES-256 at rest" (accurate — matches vault-crypto.ts)
+- "AES-256 encryption in transit (TLS 1.3) and at rest, with managed keys"
+- **Do NOT claim "zero-knowledge" or "Zawda cannot read your documents."** The current vault (`src/lib/vault-crypto.ts`) derives its key from a server-side `VAULT_MASTER_KEY`, so Zawda can technically decrypt. Zero-knowledge is only truthful once client-held keys are implemented.
+- "SOC 2 Type II compliance roadmap" — only state this if a SOC 2 engagement is actually underway; otherwise omit. Never imply a certification you don't hold.
+- "Data residency: UAE/EU servers only" and "GDPR / UAE PDPL compliant" — claim only if the deployment and DPAs actually back it.
 
 ## Monetization
 - Included in Advisory tier ($2,499/mo) and Enterprise

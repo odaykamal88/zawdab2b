@@ -30,8 +30,8 @@ const JURISDICTIONS: Jurisdiction[] = [
     status: 'Active',
     statusColor: 'text-emerald-600 bg-emerald-50',
     licenseTypes: ['Advisory Services License', 'Broker-Dealer License', 'Exchange License', 'Custody License', 'Lending/Borrowing License', 'Transfer & Settlement License', 'Stablecoin Issuance License', 'Stablecoin Management License'],
-    keyDates: ['Q4 2025: 19 firms fined up to AED 600K each', 'March 2026: Travel Rule enforcement deadline', 'Q1 2026: Quarterly compliance returns due'],
-    enforcement: 'High — 19 enforcement actions in Q4 2025 alone. Active monitoring and license revocation.',
+    keyDates: ['Penalties up to AED 600K per violation for unlicensed activity', 'March 2026: Travel Rule enforcement deadline', 'Q1 2026: Quarterly compliance returns due'],
+    enforcement: 'High — active monitoring and license revocation.',
     enforcementExamples: [
       'Dec 2025: VARA fined 7 VASPs for operating without proper license scope — AED 600K each',
       'Nov 2025: Cease-and-desist order against unlicensed exchange operating via social media',

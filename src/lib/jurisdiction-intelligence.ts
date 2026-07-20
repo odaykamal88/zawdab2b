@@ -48,7 +48,7 @@ export const JURISDICTION_PROFILES: Record<string, JurisdictionProfile> = {
     flag: '🇦🇪',
     status: 'active',
     stance: 'Most comprehensive VASP licensing framework in MENA.',
-    stanceDetail: 'VARA operates the most mature digital asset regulatory framework in the region. Activity-specific licensing, clear capital requirements, and active enforcement. 19 cease-and-desist orders in Q4 2025. This is the gold standard for MENA — but the most expensive and strictest to obtain.',
+    stanceDetail: 'VARA operates the most mature digital asset regulatory framework in the region. Activity-specific licensing, clear capital requirements, and active enforcement against unlicensed activity. This is the gold standard for MENA — but the most expensive and strictest to obtain.',
     licenses: [
       { name: 'Advisory Services License', activities: ['Advisory Services'], capital: 'AED 500K', timeline: '3–6 months' },
       { name: 'Broker-Dealer License', activities: ['Broker-Dealer', 'OTC Brokerage'], capital: 'AED 5M', timeline: '6–9 months' },
@@ -61,7 +61,7 @@ export const JURISDICTION_PROFILES: Record<string, JurisdictionProfile> = {
     ],
     risks: [
       'Highest capital requirements in the region',
-      'Active enforcement — 19 firms ceased in Q4 2025',
+      'Active enforcement against unlicensed firms',
       'Dual regulatory risk (VARA + CBUAE for stablecoins)',
       'Banking relationships extremely difficult to establish',
     ],

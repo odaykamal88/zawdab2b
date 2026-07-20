@@ -26,7 +26,7 @@ export function AlertBar() {
     >
       <a href="#pain" className="hover:underline">
         {/* Source: vara.ae — Q4 2025 enforcement actions + FATF Travel Rule deadline */}
-        VARA issued cease-and-desist orders to 19 unlicensed firms in Q4 2025 — fines up to AED 600K each. Travel Rule enforcement begins March 2026.
+        VARA is actively enforcing against unlicensed firms — fines up to AED 600K each. Travel Rule enforcement begins March 2026.
       </a>
       <button
         onClick={handleDismiss}

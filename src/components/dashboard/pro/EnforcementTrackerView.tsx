@@ -1,14 +1,16 @@
 import { UpgradeBanner, mapJurisdictionsToLabels } from './UpgradeBanner'
 
+// Illustrative sample data — anonymized action categories for the paywalled preview.
+// Live view (subscribers) renders real, sourced enforcement records with named entities + source links.
 const ACTIONS = [
-  { date: '2026-04-08', regulator: 'VARA', entity: 'AlphaChain FZE', type: 'Cease & Desist', severity: 'critical', fine: 'AED 600,000', detail: 'Operating broker-dealer services without a valid VASP license.' },
-  { date: '2026-04-05', regulator: 'ADGM', entity: 'Gulf Digital Markets Ltd', type: 'Public Censure', severity: 'high', fine: '$1,250,000', detail: 'Failure to segregate client assets per FSMR Rule 3.11.2.' },
-  { date: '2026-04-02', regulator: 'VARA', entity: 'DuneEx Trading', type: 'Financial Penalty', severity: 'high', fine: 'AED 450,000', detail: 'Inadequate AML/CFT transaction monitoring and delayed SAR filing.' },
-  { date: '2026-03-28', regulator: 'CBB', entity: 'Bahrain Crypto Exchange', type: 'License Restriction', severity: 'moderate', fine: 'BHD 75,000', detail: 'Non-compliance with Travel Rule requirements — no IVMS 101 solution.' },
-  { date: '2026-03-25', regulator: 'VARA', entity: 'MetaVault DMCC', type: 'Cease & Desist', severity: 'critical', fine: 'AED 600,000', detail: 'Unlicensed custody services and marketing of virtual asset products.' },
-  { date: '2026-03-20', regulator: 'ADGM', entity: 'Nexus Capital Partners', type: 'Financial Penalty', severity: 'moderate', fine: '$500,000', detail: 'Late submission of quarterly compliance reports and inadequate MLRO documentation.' },
-  { date: '2026-03-15', regulator: 'CMA-SA', entity: 'Riyadh Digital Securities Co', type: 'Financial Penalty', severity: 'high', fine: 'SAR 2,000,000', detail: 'Marketing digital asset securities without CMA authorization under FinTech Lab.' },
-  { date: '2026-03-10', regulator: 'QFC', entity: 'Doha Crypto Advisory LLC', type: 'Public Censure', severity: 'moderate', fine: 'QAR 400,000', detail: 'Operating unlicensed investment advisory on virtual assets.' },
+  { date: '2026-04-08', regulator: 'VARA', entity: 'Unlicensed broker-dealer', type: 'Cease & Desist', severity: 'critical', fine: 'AED 600,000', detail: 'Operating broker-dealer services without a valid VASP license.' },
+  { date: '2026-04-05', regulator: 'ADGM', entity: 'VASP — client-asset breach', type: 'Public Censure', severity: 'high', fine: '$1,250,000', detail: 'Failure to segregate client assets per FSMR Rule 3.11.2.' },
+  { date: '2026-04-02', regulator: 'VARA', entity: 'Exchange — AML/CFT gaps', type: 'Financial Penalty', severity: 'high', fine: 'AED 450,000', detail: 'Inadequate AML/CFT transaction monitoring and delayed SAR filing.' },
+  { date: '2026-03-28', regulator: 'CBB', entity: 'VASP — Travel Rule gap', type: 'License Restriction', severity: 'moderate', fine: 'BHD 75,000', detail: 'Non-compliance with Travel Rule requirements — no IVMS 101 solution.' },
+  { date: '2026-03-25', regulator: 'VARA', entity: 'Unlicensed custodian', type: 'Cease & Desist', severity: 'critical', fine: 'AED 600,000', detail: 'Unlicensed custody services and marketing of virtual asset products.' },
+  { date: '2026-03-20', regulator: 'ADGM', entity: 'VASP — reporting failure', type: 'Financial Penalty', severity: 'moderate', fine: '$500,000', detail: 'Late submission of quarterly compliance reports and inadequate MLRO documentation.' },
+  { date: '2026-03-15', regulator: 'CMA-SA', entity: 'Unauthorized securities marketing', type: 'Financial Penalty', severity: 'high', fine: 'SAR 2,000,000', detail: 'Marketing digital asset securities without CMA authorization under FinTech Lab.' },
+  { date: '2026-03-10', regulator: 'QFC', entity: 'Unlicensed advisory', type: 'Public Censure', severity: 'moderate', fine: 'QAR 400,000', detail: 'Operating unlicensed investment advisory on virtual assets.' },
 ]
 
 const PATTERNS = [
@@ -39,6 +41,9 @@ export function EnforcementTrackerView({ jurisdictions }: Props) {
         <h1 className="font-display font-bold text-text text-[length:var(--text-lg)]">Enforcement Tracker</h1>
         <p className="text-text-muted text-[length:var(--text-sm)] mt-1">
           Real-time monitoring of enforcement actions across {labels.length > 0 ? labels.join(', ') : 'your regulators'}.
+        </p>
+        <p className="text-text-faint text-[length:var(--text-xs)] mt-2 italic">
+          Illustrative sample data shown. Live enforcement records — with named entities and primary-source links — are available to subscribers.
         </p>
       </div>
 

@@ -39,7 +39,7 @@ const INTELLIGENCE_PLANS = [
       'Dashboard access with licensing roadmap',
       'Real-time regulatory change alerts (same-day)',
       'VARA / ADGM / CBB enforcement tracker',
-      'Chainalysis-powered risk screening',
+      'Wallet & counterparty risk screening (Chainalysis integration — coming soon)',
       'Custom jurisdiction watchlist',
       'Travel Rule readiness assessment',
       'Board-ready compliance reporting',
@@ -60,7 +60,7 @@ const INTELLIGENCE_PLANS = [
     features: [
       'Everything in Professional',
       'Multi-jurisdiction coordination',
-      'Chainalysis API integration',
+      'Chainalysis API integration (on roadmap)',
       'SAR filing support (VARA / CBB / FSRA)',
       'Custom API & webhook access',
       'SLA-backed response (4h critical, 24h standard)',
@@ -199,7 +199,7 @@ export function PricingSection() {
         <div className="text-center mt-6 max-w-xl mx-auto">
           {activeLine === 'intelligence' ? (
             <p className="text-text-muted text-[length:var(--text-sm)]">
-              Real-time regulatory intelligence, enforcement tracking, and Chainalysis-powered risk screening. Built for compliance officers who need to stay ahead of MENA regulators.
+              Real-time regulatory intelligence and enforcement tracking, with wallet risk screening on our roadmap. Built for compliance officers who need to stay ahead of MENA regulators.
             </p>
           ) : (
             <p className="text-text-muted text-[length:var(--text-sm)]">
