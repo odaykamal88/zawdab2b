@@ -95,9 +95,9 @@ export function HeroSection() {
         {/* Trust metrics — last slot rotates weekly to the top regulatory risk */}
         <div className="flex flex-wrap justify-center gap-10 mt-12 pt-8 border-t border-border">
           {[
-            { value: '150+', label: 'assessments completed' },
+            { value: 'Daily', label: 'regulator monitoring' },
             { value: '8+', label: 'jurisdictions covered' },
-            { value: '$2.4M', label: 'in potential fines mitigated' },
+            { value: 'AED 600K', label: 'max penalty per violation' },
             weeklyRisk
               ? { value: weeklyRisk.stat, label: weeklyRisk.statLabel }
               : { value: '—', label: 'this week\u2019s top risk' },

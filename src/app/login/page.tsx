@@ -73,9 +73,9 @@ export default function LoginPage() {
           </p>
           <div className="space-y-3">
             {[
-              'Trusted by VASPs across VARA, ADGM, and CBB',
-              '$2.4M in potential fines identified for clients',
-              '150+ compliance assessments completed',
+              'Regulatory intelligence across VARA, ADGM, and CBB',
+              'Enforcement tracking — penalties up to AED 600K per violation',
+              'Daily monitoring of MENA regulators',
             ].map((point) => (
               <div key={point} className="flex items-start gap-2.5">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0" aria-hidden="true">
