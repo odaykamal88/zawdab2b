@@ -1,6 +1,6 @@
 # CBB In-Principle Confirmation — Fact Sheet
 
-> **CONFIDENTIAL — for diligence under NDA only.** Per caveat (iii) of the letter below, Zawda may not publicly announce CBB approval or the in-principle confirmation. This fact sheet, and the underlying letter, are shared confidentially with a prospective acquirer under NDA and must not be reproduced publicly, in a press release, or in publicly-shared marketing.
+> **CONFIDENTIAL — for diligence under NDA.** The CBB application was **withdrawn in March 2026** (see Status), so the letter's caveat-(iii) cancellation risk is now moot. Two rules still hold: (1) never represent this as a CBB *approval* or *licence* — it was an in-principle confirmation to proceed, then withdrawn; (2) treat the underlying letter as confidential and share it only under NDA.
 
 ## The document
 - **Type:** In-principle confirmation to proceed with the CBB licensing process (a first-stage acknowledgement — *not* a licence and *not* final approval).
@@ -29,10 +29,11 @@ The applied-for licence is **custody-inclusive** and trading-capable. The Schedu
 ## How to represent it (and how not to)
 - ✅ "Zawda received a Governor-signed **in-principle confirmation** from the CBB (OG/156/2025) to proceed with the licensing process for a Category 2 Crypto-Asset Service Provider licence."
 - ✅ "Zawda authored the CRA-module custody, private-key and wallet-control framework the CBB required at this stage."
-- ❌ "CBB-approved / CBB-licensed / provisional licence granted." (False, and publicly stating it risks cancellation.)
-- ❌ Any public/press use whatsoever (caveat iii).
+- ❌ "CBB-approved / CBB-licensed / provisional licence granted." (False — it was an in-principle confirmation to proceed, then withdrawn.)
+- ✅ Complete the picture: "…application voluntarily withdrawn in March 2026 on the pivot away from the custody model."
 
-## 🚩 OPEN ITEMS (must resolve before/within diligence)
-1. **Current standing.** The Schedule's 6-month submission window (≈**3 December 2025**) has passed. Confirm with the CBB Licensing Directorate (Mr. Abdulla Haji, Director of Licensing) whether the application is **live, was extended, or has lapsed/been cancelled.** This determines whether the credential is current or historical. **Single most important CBB DD fact.**
-2. **Entity status.** Zawda W.L.L. was "under formation" as of June 2025 — confirm current incorporation status in Bahrain.
-3. **Schedule progress.** Document which of the 15 Schedule items were submitted, and the CBB's response to each.
+## Status — application WITHDRAWN (March 2026)
+The founder **voluntarily withdrew the CBB application in March 2026**, on pivoting away from the Category 2 (custody-inclusive) business model. Therefore:
+- The CBB in-principle confirmation is a **historical credential**, not a live/pending application — nothing to renew, complete, or cancel.
+- Represent it as: *"Zawda took a custody-inclusive Category 2 CASP application to a Governor-signed CBB in-principle confirmation (June 2025), then deliberately withdrew it (March 2026) on pivoting away from custody."* This proves regulatory-execution capability **and** the intentional move off custody — which aligns with an acquirer that avoids custody.
+- **Remaining DD notes:** obtain/date the written withdrawal (any acknowledgement from the CBB); confirm the current status of the Zawda W.L.L. (Bahrain) entity itself post-withdrawal.

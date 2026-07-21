@@ -51,8 +51,8 @@ Split deliberately into three tiers so diligence knows exactly what is real, wha
 - **Scope (per the attached Schedule):** the Category 2 CASP is **custody-inclusive** — private-key creation/management/controls and wallet-access management (Rule CRA-5.1.2, Chapter 8 CRA Module), plus a trading platform, KYC, and a crypto-asset listing policy; BD 171,000 paid-up capital and BD 100,000 professional-indemnity insurance required.
 - **What it genuinely proves:** (1) the founder took a **tier-1 MENA central bank to a Governor-signed in-principle confirmation**; (2) Zawda built the CRA-module **custody / key-management / wallet-control framework** the CBB required — that framework is the regulated *enforcement-substrate* IP that maps directly onto agent transaction controls.
 - **What it does NOT prove — and must never be represented as proving:** it is **not** a licence, **not** an approval, and **not** a certification of an "AI-agent compliance framework." Any claim beyond "in-principle confirmation to proceed" is false and will be caught when legal DD reads the letter.
-- 🚩 **Confidentiality (letter caveat iii):** the letter **prohibits public announcements** that Zawda has been approved by the CBB, *"whether an 'in-principle' confirmation has been provided… or otherwise,"* and a violation **"may result in your… licence application being cancelled."** Use it **confidentially, in diligence under NDA, only — never in public marketing, a deck shared publicly, or a press release.**
-- 🚩 **OPEN ITEM — current standing (must confirm):** the Schedule set a **6-month submission deadline (≈3 December 2025)**; failure "ordinarily lead[s] to the licence application being cancelled." That window has passed. Confirm with the CBB Licensing Directorate whether the application is **live, extended, or lapsed** — this is the single most important CBB due-diligence fact, and it is currently unresolved.
+- **Status — withdrawn (March 2026):** the founder voluntarily withdrew the application on pivoting off the custody-inclusive Category 2 model. It is now a **historical credential** — regulatory-execution proof, not a live application. See [cbb-approval-factsheet.md](cbb-approval-factsheet.md).
+- **Confidentiality & accuracy:** withdrawal makes the letter's cancellation risk moot, but still never represent it as a CBB *approval/licence*, and share the underlying letter only under NDA.
 - **Reconciliation done:** the site's dormant `TrackRecordSection` claim ("CBB Category 3 Provisional License / application submitted") was factually wrong (it is Category 2, an in-principle confirmation) and has been corrected to a non-approval-claiming line.
 
 ### 3c. Buildable in 30–60 days — the proof-of-concept (Sprint 3)
@@ -67,7 +67,7 @@ Chainalysis is, by design, averse to operating asset custody (regulatory burden)
 
 - **The acquisition is not "operate Zawda's custody/exchange business."** It is the IP (policy engine + the CRA-module key-management/wallet-control framework + MENA dataset), the team, and the regulatory playbook. Chainalysis can adopt the enforcement architecture as software without becoming a licensed custodian.
 - **The CBB relationship is proof-of-capability, not a balance sheet they must run.** Its value is that a founder got a **Governor-signed in-principle confirmation** and authored the CRA-module custody/key-control framework — de-risking the regulatory path for programmatic agent-transaction controls, the question their x402/agentic-payments work will inevitably hit.
-- **Honest positioning decision:** because the credential is custody-inclusive *and* cannot be publicly touted *and* its current standing is unconfirmed (see 3b), we **do not make it the headline.** The headline is the enforcement layer + the MENA data moat + the founder/regulatory relationships. The CBB in-principle confirmation is confidential supporting evidence, presented in the data room under NDA with its caveats intact.
+- **The pivot is the story:** Zawda took a custody-inclusive Category 2 CASP to a Governor-signed CBB in-principle confirmation, then **deliberately withdrew it in March 2026** on moving off custody — proving regulatory-execution capability *and* an intentional move away from the exact activity Chainalysis avoids. Keep it as confidential supporting evidence (under NDA), not the public headline; the headline is the enforcement layer + MENA data moat + founder/regulatory relationships.
 
 ---
 
@@ -77,7 +77,7 @@ Stating these up front is a credibility asset in diligence:
 - No live Chainalysis integration exists yet — it is on the roadmap and labeled as such in-product.
 - The document vault is AES-256 at rest with managed keys; it is **not** "zero-knowledge" (that requires client-held keys, not yet built).
 - The transaction-interception capability is a PoC, not a shipped product.
-- Biographical track-record figures ($450K raised, "3 companies licensed," "21+ institutional buyers / ~100 BTC") must each be backed by evidence in the data room or removed.
+- Biographical figures need data-room evidence: the **$450K raise is now evidenced** by the Axiom ($200k) + Wolf ($250k option) SAFEs — see [cap-table.md](cap-table.md) (note: issued by MENA Lightning Network, Inc. (Delaware), not Zawda W.L.L.; confirm Wolf’s funded amount). “3 companies licensed” and “21+ buyers / ~100 BTC” still need documents or removal.
 
 ---
 

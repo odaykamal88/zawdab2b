@@ -42,3 +42,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# acquisition data room — keep RAW confidential source docs OUT of git.
+# The markdown in docs/acquisition/ is summaries/references only; the raw CBB
+# letter, executed SAFEs, and UBO/personal files live in secure storage.
+/docs/acquisition/confidential/
+*.safe.pdf
