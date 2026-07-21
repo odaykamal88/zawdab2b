@@ -7,9 +7,6 @@ export function TrackRecordSection() {
     // letter stays confidential to the diligence data room.
     { title: 'CBB Crypto-Asset licence — application filed', description: 'Applied to the Central Bank of Bahrain for a Crypto-Asset Service Provider (Category 2) licence for Zawda W.L.L. (under formation).' },
     { title: 'THNDR — Early Conversations', description: 'Engaged with THNDR on institutional Bitcoin infrastructure for the GCC market.' },
-    { title: '3 Companies Licensed', description: 'Guided three companies through the MENA digital asset licensing process — VARA, ADGM, and CBB frameworks.' },
-    { title: '21+ Institutional Buyers', description: '21+ institutional buyers facilitated with approximately 100 BTC acquired at institutional OTC rates.' },
-    { title: '15–20% OTC Cost Reduction', description: 'Achieved 15–20% cost reduction vs retail exchange rates through institutional OTC desk relationships.' },
   ]
 
   return (

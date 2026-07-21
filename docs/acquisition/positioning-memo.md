@@ -77,7 +77,7 @@ Stating these up front is a credibility asset in diligence:
 - No live Chainalysis integration exists yet — it is on the roadmap and labeled as such in-product.
 - The document vault is AES-256 at rest with managed keys; it is **not** "zero-knowledge" (that requires client-held keys, not yet built).
 - The transaction-interception capability is a PoC, not a shipped product.
-- Biographical figures need data-room evidence: the **$450K raise is now evidenced** by the Axiom ($200k) + Wolf ($250k option) SAFEs — see [cap-table.md](cap-table.md) (note: issued by MENA Lightning Network, Inc. (Delaware), not Zawda W.L.L.; confirm Wolf’s funded amount). “3 companies licensed” and “21+ buyers / ~100 BTC” still need documents or removal.
+- Biographical figures: the **$450K raise is evidenced** by the Axiom ($200k) + Wolf ($250k) SAFEs — see [cap-table.md](cap-table.md) (issued by MENA Lightning Network, Inc. (Delaware)). The unverified “3 companies licensed” and “21+ buyers / ~100 BTC” claims have been **removed** from the code.
 
 ---
 

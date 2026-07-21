@@ -19,7 +19,7 @@
 4. **Document vault** — `lib/vault-crypto.ts` (AES-256-GCM, scrypt-derived key from `VAULT_MASTER_KEY`) + `lib/vault-storage.ts` (Vercel Blob). Managed-key model — **not** zero-knowledge.
 5. **Compliance/ops** — DSAR pipeline (`lib/dsar.ts`), incident notifications (`lib/incident.ts`), tamper-aware audit log (`lib/audit-log.ts`), SLA/ToS pages.
 6. **Payments** — Chargebee checkout, billing portal, subscription state (`lib/chargebee.ts`, `lib/subscription.ts`), webhooks (`app/api/webhooks/chargebee`, `.../clerk`).
-7. **Agent Controls (new IP — Sprint 3)** — `lib/agent-controls/`: a policy-enforcement engine that authorizes or intercepts a proposed agent transaction *before signing*. Pluggable intelligence (real OFAC SDN sanctions provider + interface for a KYT provider), five programmatic policies (sanctions, risk, per-tx limit, daily limit, jurisdiction allowlist), and a hash-chained tamper-evident audit log. Demo at `/agent-controls`; runnable via `npx tsx scripts/agent-controls-demo.ts`.
+7. **Agent Controls (new IP)** — `lib/agent-controls/`: (a) a policy-enforcement engine that authorizes or intercepts a proposed agent transaction *before signing* — pluggable intelligence (real OFAC SDN + interface for a KYT provider), five programmatic policies, hash-chained audit (demo `/agent-controls`, run `scripts/agent-controls-demo.ts`); and (b) a `workflows/` layer with a **compliance-analyst agent** that automates alert triage → FIU-specific SAR/escalation drafting → audit (demo `/agent-controls/triage`, run `scripts/compliance-workflow-demo.ts`).
 8. **v1 API (Sprint 2)** — see [api.md](api.md). `GET /api/v1/jurisdictions[/id]` (public, provenance-enriched), `POST /api/v1/assess` (API-key-gated recommendation engine).
 
 ## Security posture

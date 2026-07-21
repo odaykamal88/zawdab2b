@@ -14,7 +14,7 @@ const TOOLS = [
   {
     title: 'BTC Treasury Tracker',
     description: 'Track which MENA institutions hold Bitcoin on their balance sheet.',
-    mockData: ['21+ institutional buyers tracked', '~100 BTC total acquired', 'OTC institutional rates', 'Disclosure verified quarterly'],
+    mockData: ['OTC execution tracking', 'Institutional rate benchmarking', 'Disclosure verified quarterly'],
   },
 ]
 

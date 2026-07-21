@@ -1,25 +1,25 @@
 # Cap Table & Financing (summary)
 
-> **CONFIDENTIAL — for diligence under NDA.** This is a summary. The executed SAFE instruments are the source of truth and are stored in the secure data room / file store — they are **not** committed to this repository (see `.gitignore`).
+> **CONFIDENTIAL — for diligence under NDA.** This is a summary. The executed SAFEs, certificate of incorporation, tax returns, and EIN are the source of truth and are stored in the secure file store — **not** committed to this repository (see `.gitignore`).
 
-## ⚠ Entity structure — resolve first
-The SAFEs below were issued by **MENA Lightning Network, Inc., a Delaware corporation** — not by **Zawda W.L.L.** (Bahrain, the withdrawn CBB applicant). Before diligence, document:
-- The relationship between MENA Lightning Network, Inc. (Delaware) and the entity being acquired / operating Zawda today.
-- In which entity the SAFEs sit and convert, and whether any assignment/flip was done on the pivot.
-- Which legal entity holds the IP built in this repo. **This is the first question an acquirer's counsel will ask.**
+## Entity — MENA Lightning Network, Inc. (Delaware C-corp)
+- **Incorporated:** 23 March 2023, Delaware (File No. 7367889). Registered agent: Corporation Service Company, 251 Little Falls Drive, Wilmington, DE 19808.
+- **Authorized:** 10,000,000 shares of Common Stock, par value $0.00001.
+- **Tax/substance:** US federal Form 1120 filed for **2024 and 2025**; foreign-owned (Form **5472** filed); business activity code **541512 (Computer Systems Design Services)** — i.e. classified as software, not financial/custody; 2024 return shows a net operating loss (**pre-revenue**). EIN on file (not warehoused here).
 
-## SAFE financing (issuer: MENA Lightning Network, Inc., Delaware)
+**Still to resolve for counsel:** the relationship (if any) between this Delaware entity and **Zawda W.L.L.** (Bahrain — the withdrawn CBB applicant), and confirmation that the IP built in this repo is assigned to the entity being acquired.
+
+## SAFE financing (issuer: MENA Lightning Network, Inc.)
 
 | Investor | Instrument | Amount (USD) | Post-money cap | Date | Notes |
 |---|---|---|---|---|---|
-| Axiom Venture Fund I LP | Post-money SAFE (YC) | $200,000 | $5,000,000 | 16 Oct 2023 | Has discount-rate + MFN terms |
-| In Wolfs Clothing Investments LLC (Wolf accelerator) | SAFE | $250,000 **or** $750,000 (investor option) | Purchase Amount ÷ 7.5% ("Wolf Percentage") | Post–Demo Day | MFN provision; payable USD/BTC/debt-forgiveness within 10 business days of Demo Day |
+| Axiom Venture Fund I LP | Post-money SAFE (YC) | $200,000 | $5,000,000 | 16 Oct 2023 | discount-rate + MFN terms |
+| In Wolfs Clothing Investments LLC (Wolf accelerator) | SAFE | $250,000 (confirmed) | Purchase Amount ÷ 7.5% ("Wolf Percentage") ≈ $3.33M | Post–Demo Day | MFN provision; payable USD/BTC/debt-forgiveness |
 
-## "$450K raised" — reconciliation
-The public "$450K raised" figure reconciles as **Axiom $200,000 + Wolf $250,000** (Wolf's lower option). **Confirm the actual Wolf funded amount** — the instrument gives the investor a $250k/$750k option, so if $750k was taken the total is ~$950k. Represent whichever the bank records actually show.
+## "$450K raised" — reconciled ✓
+**$450,000 = Axiom $200,000 + Wolf $250,000.** Both SAFEs sit in MENA Lightning Network, Inc. and convert on a priced round.
 
 ## Open items
-1. Confirm the Wolf funded amount ($250k vs $750k) from bank records.
-2. Resolve the entity-structure question above; produce a fully-diluted, as-converted cap table for the acquired entity.
-3. List any other holders (founder shares, option pool, advisors, other SAFEs/notes).
-4. Confirm both SAFEs' current status post-pivot (still outstanding, converted, or amended).
+1. Resolve the Delaware ↔ Bahrain entity relationship; confirm IP assignment to the acquired entity.
+2. Produce a fully-diluted, as-converted cap table (founder shares, option pool, both SAFEs, any others).
+3. Confirm both SAFEs' current status post-pivot (outstanding / converted / amended).
