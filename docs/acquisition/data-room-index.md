@@ -14,6 +14,7 @@
 | [api.md](api.md) | v1 API reference (dataset + recommendation engine as a module) |
 | Agent Controls PoCs | Enforcement agent (`/agent-controls`) + compliance-analyst triage agent (`/agent-controls/triage`); run `npx tsx scripts/agent-controls-demo.ts` and `scripts/compliance-workflow-demo.ts` |
 | Provenance coverage | `npx tsx scripts/provenance-report.ts` (7/15 jurisdictions source-linked) |
+| Regulatory corpus (API) | `/api/v1/corpus` (gated) — provenanced dataset; `npx tsx scripts/corpus-coverage.ts` (11 items, 5 primary-verified, 3 flagged) |
 
 ## Corporate & IP
 - **Entity (sole):** **MENA Lightning Network, Inc.** — Delaware C-corp (inc. 23 Mar 2023, 10M shares; 2024/2025 Form 1120; software-classified 541512; pre-revenue). **Zawda W.L.L. (Bahrain) was never incorporated** — no Bahrain entity exists. Remaining: IP assignment to the Delaware co — see [cap-table.md](cap-table.md).
@@ -28,6 +29,7 @@
 - ✅ **v1 API** — verified live (jurisdictions 200; assess 503-gated until key set).
 - ✅ **Compliance-analyst agent** — verified running (4 alerts → 1 dismiss / 1 escalate / 2 SAR; FIU-specific drafts; audit chain valid); demo at `/agent-controls/triage`.
 - ✅ **Corporate** — Delaware C-corp confirmed (certificate of incorporation); $450k raise reconciled; unverified "3 companies licensed" and "21+ buyers / ~100 BTC" claims removed from code.
+- ✅ **Regulatory corpus** — structured, source-provenanced dataset behind a gated API (`/api/v1/corpus`): regulations, enforcement, obligations, effective dates, control mappings, taxonomies. 11 seed items, all with provenance, 3 flagged for verification. Real data only — not AI-generated.
 
 ## 🚩 Open items / diligence checklist (ranked)
 1. **IP assignment** — confirm all code (incl. contractor / AI-assisted) is assigned to MENA Lightning Network, Inc. *Highest priority.* (No Bahrain entity — Zawda W.L.L. was never incorporated; CBB withdrawn Mar 2026.)

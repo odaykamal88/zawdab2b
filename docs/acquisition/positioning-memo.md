@@ -35,7 +35,7 @@ Demand there is regulator-mandated, not speculative: **VARA now operationally re
 
 ### 3b. Proof of build capability (not the differentiator)
 - Two working, audited agents: a transaction-**enforcement** agent (`/agent-controls`) and a **compliance-analyst** agent that automates alert triage → FIU-specific SAR drafting → tamper-evident audit (`/agent-controls/triage`). Runnable: `npx tsx scripts/agent-controls-demo.ts` and `scripts/compliance-workflow-demo.ts`.
-- A documented v1 API packaging the dataset + recommendation engine as a module.
+- A documented, gated **v1 API** — the recommendation engine plus a **provenanced regulatory corpus** (`/api/v1/corpus`: regulations, enforcement, obligations, effective dates, control mappings, and jurisdiction/licence taxonomies, each with a verification status). Seeded with real sourced data; an ingestion pipeline (not AI generation) fills the rest.
 - These demonstrate the "builder" leg of the trusted-data × domain × builder trifecta — they are evidence, not the pitch.
 
 ### 3c. Trusted data
@@ -45,12 +45,14 @@ Demand there is regulator-mandated, not speculative: **VARA now operationally re
 
 ## 4. Buyer fit — run a shortlist, don't single-thread
 
-| Buyer | Why the MENA layer matters to them | Angle |
+| Buyer | Why the MENA layer matters | The specific asset they'd buy |
 |---|---|---|
-| **Chainalysis** | MENA-light; publicly invited builders (Levin, Links 2026); building agents | Domain-expertise leg they can't hire; agent-side + Gulf localization |
-| **TRM Labs** | Just a $1B unicorn, developer-first, real-time, hungry to expand coverage | Fastest-moving; MENA coverage + FIU workflows extend their footprint |
-| **Elliptic** | Freshly funded (Series D), agentic Copilot, government-facing | Government/FIU relationships in the Gulf are strategic |
-| **MENA-expanding platforms** | Coinbase (Dubai/VARA), regional exchanges needing VARA's operational mandate | Buy the compliance operating layer VARA now requires |
+| **Chainalysis** | MENA-light; publicly invited builders (Levin, Links 2026) | Regional expansion + customer distribution + regulatory workflows complementing their on-chain data |
+| **TRM Labs** | $1B unicorn, developer-first, expanding coverage | Government/regulator relationships + investigations & **training** — their CSITech acquisition was for investigative expertise and training, *not* compliance software |
+| **Elliptic** | Series D, agentic Copilot, government-facing | Jurisdictional risk intelligence + sanctions/typology research + integrations around their blockchain analytics |
+| **MENA-expanding platforms** | Coinbase (Dubai/VARA); regional exchanges under VARA's mandate | The compliance operating layer VARA now operationally requires |
+
+*Distribution (active VASP customers) and regional authority (named experts, original analysis) strengthen every one of these — but they are founder-led, not product; see §8.*
 
 Chainalysis stays primary, but the MENA asset is valuable to all three intelligence majors — that optionality is your leverage.
 
