@@ -5,8 +5,9 @@
 ## Contents
 | Doc | What it is |
 |---|---|
-| [positioning-memo.md](positioning-memo.md) | Strategic thesis — the agent-side enforcement layer that complements Chainalysis's intelligence |
-| [chainalysis-fit.md](chainalysis-fit.md) | One-pager mapping the build to Levin's Links-2026 "build agents, automate workflows" invitation |
+| [positioning-memo.md](positioning-memo.md) | Strategic thesis — MENA-native agentic compliance; buyer-agnostic (Chainalysis / TRM / Elliptic) |
+| [why-acquire.md](why-acquire.md) | Buyer-agnostic one-pager — the MENA gap + buyer fit |
+| [competitive-landscape.md](competitive-landscape.md) | The agentic compliance/payments field (mid-2026) and where Zawda sits |
 | [cbb-approval-factsheet.md](cbb-approval-factsheet.md) | CBB in-principle confirmation (Category 2 CASP) — **application withdrawn Mar 2026**; represented accurately with caveats |
 | [cap-table.md](cap-table.md) | Financing summary — Axiom + Wolf SAFEs (issuer: MENA Lightning Network, Inc., Delaware); entity-structure flag |
 | [architecture.md](architecture.md) | System architecture, stack, security posture, known issues |
@@ -15,21 +16,21 @@
 | Provenance coverage | `npx tsx scripts/provenance-report.ts` (7/15 jurisdictions source-linked) |
 
 ## Corporate & IP
-- **Entities:** **MENA Lightning Network, Inc.** (Delaware C-corp, inc. 23 Mar 2023, 10M authorized shares; 2024/2025 Form 1120 filed; software-classified (541512), pre-revenue) issued the SAFEs; the withdrawn CBB application was **Zawda W.L.L. (Bahrain)**. Remaining: the Delaware↔Bahrain relationship + IP assignment — see [cap-table.md](cap-table.md).
+- **Entity (sole):** **MENA Lightning Network, Inc.** — Delaware C-corp (inc. 23 Mar 2023, 10M shares; 2024/2025 Form 1120; software-classified 541512; pre-revenue). **Zawda W.L.L. (Bahrain) was never incorporated** — no Bahrain entity exists. Remaining: IP assignment to the Delaware co — see [cap-table.md](cap-table.md).
 - **Founder:** Oday Kamal (solo founder).
 - **IP ownership — action required:** confirm that all code (including AI-assisted and any contractor work) is assigned to the entity, with signed IP-assignment/contractor agreements. Solo-founder deals get re-priced when IP provenance is unclear.
 - **Cap table:** [cap-table.md](cap-table.md) — Axiom ($200k, $5M cap) + Wolf ($250k, confirmed) = **$450k raised**. Produce a fully-diluted, as-converted table.
 
 ## Verified & complete (this branch)
 - ✅ **Integrity pass** — fabricated enforcement entities/stats removed; vaporware features labelled; false "zero-knowledge" claim corrected; dormant false "CBB Category 3 provisional license" line corrected.
-- ✅ **Positioning memo** — grounded in Chainalysis's real 2026 moves; CBB represented exactly per the letter.
+- ✅ **Positioning** — MENA-first, buyer-agnostic (Chainalysis / TRM / Elliptic); landscape-aware; CBB represented exactly per the letter.
 - ✅ **Agent-controls PoC** — verified running (1 executed / 4 intercepted / 1 review; audit chain valid) and rendered in-browser.
 - ✅ **v1 API** — verified live (jurisdictions 200; assess 503-gated until key set).
 - ✅ **Compliance-analyst agent** — verified running (4 alerts → 1 dismiss / 1 escalate / 2 SAR; FIU-specific drafts; audit chain valid); demo at `/agent-controls/triage`.
 - ✅ **Corporate** — Delaware C-corp confirmed (certificate of incorporation); $450k raise reconciled; unverified "3 companies licensed" and "21+ buyers / ~100 BTC" claims removed from code.
 
 ## 🚩 Open items / diligence checklist (ranked)
-1. **IP assignment + entity relationship** — confirm the code IP is assigned to the acquired entity, and map the Delaware (MENA Lightning Network, Inc.) ↔ Bahrain (Zawda W.L.L., withdrawn CBB applicant) relationship. *Highest priority.* (CBB standing resolved: withdrawn Mar 2026; corporate/cap-table now documented.)
+1. **IP assignment** — confirm all code (incl. contractor / AI-assisted) is assigned to MENA Lightning Network, Inc. *Highest priority.* (No Bahrain entity — Zawda W.L.L. was never incorporated; CBB withdrawn Mar 2026.)
 2. **Biographical claims** — $450k raise evidenced ✓; unverified "3 companies licensed" and "21+ buyers / ~100 BTC" **removed** from code ✓. THNDR "early conversations" and the "first institutional-grade advisory in the region" superlative remain — verify or soften.
 3. **IP-assignment confirmations** — signed agreements for all contributors.
 4. **Entity/cap-table documents** — incorporation certificate, cap table, financing instruments.
@@ -38,4 +39,4 @@
 7. **Certifications** — only claim SOC 2 / data-residency / PDPL/GDPR where actually backed; otherwise omit.
 
 ## Commercial (the structural gap)
-Pre-revenue. This is an acqui-hire / IP + regulatory-option profile. Strengtheners a founder can add: 2–3 design partners or paid pilots on the compliance product, and a warm path to Chainalysis corporate development. These lift the last stretch that engineering cannot.
+Pre-revenue — the biggest valuation lever. Founder is assembling proof via **design partners / recyclable prior LOIs**. Positioning is now **MENA-first and buyer-agnostic** — the moat is MENA localization + relationships + speed, not the tooling (see [competitive-landscape.md](competitive-landscape.md)).

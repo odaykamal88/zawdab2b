@@ -7,7 +7,7 @@
 - **Reference:** OG/156/2025
 - **Date:** 3 June 2025
 - **Issued by:** Central Bank of Bahrain, signed by **Khalid Humaidan, Governor**
-- **Applicant:** Zawda W.L.L. (under formation), Kingdom of Bahrain
+- **Applicant:** Zawda W.L.L. (under formation), Kingdom of Bahrain — **this entity was never actually incorporated.**
 - **Application:** Crypto-Asset Service Provider / **Category 2** licence
 
 ## What it says (material terms, quoted)
@@ -36,4 +36,4 @@ The applied-for licence is **custody-inclusive** and trading-capable. The Schedu
 The founder **voluntarily withdrew the CBB application in March 2026**, on pivoting away from the Category 2 (custody-inclusive) business model. Therefore:
 - The CBB in-principle confirmation is a **historical credential**, not a live/pending application — nothing to renew, complete, or cancel.
 - Represent it as: *"Zawda took a custody-inclusive Category 2 CASP application to a Governor-signed CBB in-principle confirmation (June 2025), then deliberately withdrew it (March 2026) on pivoting away from custody."* This proves regulatory-execution capability **and** the intentional move off custody — which aligns with an acquirer that avoids custody.
-- **Remaining DD notes:** obtain/date the written withdrawal (any acknowledgement from the CBB); confirm the current status of the Zawda W.L.L. (Bahrain) entity itself post-withdrawal.
+- **Remaining DD notes:** Zawda W.L.L. (Bahrain) was **never incorporated**, so there is no Bahrain entity to diligence — the sole entity is MENA Lightning Network, Inc. (Delaware). Optionally obtain any written acknowledgement of the withdrawal from the CBB.

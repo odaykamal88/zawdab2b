@@ -39,7 +39,7 @@ const INTELLIGENCE_PLANS = [
       'Dashboard access with licensing roadmap',
       'Real-time regulatory change alerts (same-day)',
       'VARA / ADGM / CBB enforcement tracker',
-      'Wallet & counterparty risk screening (Chainalysis integration — coming soon)',
+      'Wallet & counterparty risk screening (KYT integration — roadmap)',
       'Custom jurisdiction watchlist',
       'Travel Rule readiness assessment',
       'Board-ready compliance reporting',
@@ -60,7 +60,7 @@ const INTELLIGENCE_PLANS = [
     features: [
       'Everything in Professional',
       'Multi-jurisdiction coordination',
-      'Chainalysis API integration (on roadmap)',
+      'KYT provider integration (on roadmap)',
       'SAR filing support (VARA / CBB / FSRA)',
       'Custom API & webhook access',
       'SLA-backed response (4h critical, 24h standard)',

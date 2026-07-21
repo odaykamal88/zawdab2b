@@ -7,7 +7,7 @@
 - **Authorized:** 10,000,000 shares of Common Stock, par value $0.00001.
 - **Tax/substance:** US federal Form 1120 filed for **2024 and 2025**; foreign-owned (Form **5472** filed); business activity code **541512 (Computer Systems Design Services)** — i.e. classified as software, not financial/custody; 2024 return shows a net operating loss (**pre-revenue**). EIN on file (not warehoused here).
 
-**Still to resolve for counsel:** the relationship (if any) between this Delaware entity and **Zawda W.L.L.** (Bahrain — the withdrawn CBB applicant), and confirmation that the IP built in this repo is assigned to the entity being acquired.
+**Still to resolve for counsel:** confirmation that the IP built in this repo (incl. contractor / AI-assisted work) is assigned to MENA Lightning Network, Inc. There is **no Bahrain entity** — Zawda W.L.L. (the withdrawn CBB applicant) was never incorporated, so MENA Lightning Network, Inc. is the sole entity.
 
 ## SAFE financing (issuer: MENA Lightning Network, Inc.)
 
@@ -20,6 +20,6 @@
 **$450,000 = Axiom $200,000 + Wolf $250,000.** Both SAFEs sit in MENA Lightning Network, Inc. and convert on a priced round.
 
 ## Open items
-1. Resolve the Delaware ↔ Bahrain entity relationship; confirm IP assignment to the acquired entity.
+1. Confirm IP assignment (code, incl. contractor / AI-assisted) to MENA Lightning Network, Inc. (No Bahrain entity — Zawda W.L.L. was never incorporated.)
 2. Produce a fully-diluted, as-converted cap table (founder shares, option pool, both SAFEs, any others).
 3. Confirm both SAFEs' current status post-pivot (outstanding / converted / amended).
