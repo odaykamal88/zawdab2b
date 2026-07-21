@@ -5,6 +5,17 @@ Never commit `.env*` files.
 
 ---
 
+## Postgres
+
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | Primary Postgres connection string used by the app runtime. For Neon on Vercel, prefer the pooled/serverless application URL. |
+| `DATABASE_URL_DIRECT` | Direct Postgres connection string used by migration and admin tooling. If you only have one connection string initially, you can temporarily set this to the same value as `DATABASE_URL`. |
+
+Used by: `src/db/client.ts` and `drizzle.config.ts` for the Phase 0 Postgres scaffold.
+
+---
+
 ## Upstash Redis
 
 | Variable | Description |
@@ -56,8 +67,9 @@ Used by: `src/middleware.ts` and all protected routes.
 | Variable | Description |
 |---|---|
 | `TELEGRAM_BOT_TOKEN` | Bot token from @BotFather |
+| `TELEGRAM_WEBHOOK_SECRET` | Secret token configured when setting the Telegram webhook. Sent back on each webhook request as `X-Telegram-Bot-Api-Secret-Token`. |
 
-Used by: `src/app/api/bot/telegram/route.ts` and `src/app/api/cron/crawl/route.ts`. If unset, bot features are disabled but the rest of the app works normally.
+Used by: `src/app/api/bot/telegram/route.ts` and `src/app/api/cron/crawl/route.ts`. If unset, outbound bot messaging is disabled, and the webhook route now rejects requests instead of accepting unsigned updates.
 
 ---
 
@@ -65,9 +77,9 @@ Used by: `src/app/api/bot/telegram/route.ts` and `src/app/api/cron/crawl/route.t
 
 | Variable | Description |
 |---|---|
-| `CRON_SECRET` | Shared secret for protecting cron endpoints. If set, requests must include `Authorization: Bearer <secret>` |
+| `CRON_SECRET` | Shared secret for protecting cron endpoints. Requests must include `Authorization: Bearer <secret>`. Cron routes fail closed if this is missing. |
 
-Used by: `/api/cron/crawl` and `/api/dashboard/seed`.
+Used by: `/api/cron/crawl`, `/api/cron/crawl-regulatory`, and `/api/dashboard/seed`.
 
 ---
 

@@ -3,10 +3,9 @@
  * Handles message formatting, smart dispatch logic, and weekly digest compilation.
  *
  * Dispatch rules:
- * - Max 1-2 messages per week per subscriber
- * - Weekly digest sent Monday 8am GST
- * - Only "critical" severity breaks the weekly rhythm (major enforcement, deadline changes)
- * - Everything else is batched into the weekly summary
+ * - Alert threshold (minSeverity) controls what gets pushed immediately
+ * - Weekly digest batches everything below the threshold
+ * - SLA §3.1: critical alerts always dispatched within 4 hours, no exceptions
  */
 
 import {
@@ -15,72 +14,74 @@ import {
   UPDATE_TYPE_LABELS,
   UPDATE_TYPE_ICONS,
   REGULATORY_SOURCES,
+  JURISDICTION_GROUPS,
 } from './regulatory-sources'
 
 export type Channel = 'telegram' | 'whatsapp'
 export type Frequency = 'weekly' | 'twice-weekly' | 'critical-only'
+export type AlertLevel = 'critical' | 'high' | 'medium'
 
 export interface BotSubscriber {
   id: string
   channel: Channel
   chatId: string
-  /** Jurisdiction codes they're tracking */
   jurisdictions: string[]
   frequency: Frequency
-  /** Optional email for parallel digest */
+  /** Minimum severity for an immediate push notification (below threshold goes to digest only) */
+  minSeverity: AlertLevel
   email?: string
-  /** When they last received a notification */
   lastNotifiedAt?: string
-  /** How many notifications sent this week */
   weeklyCount: number
-  /** Week number for reset */
   weekNumber: number
   createdAt: string
+  /** Tracks onboarding wizard step; cleared once onboarding is complete */
+  onboardingStep?: 'jurisdictions' | 'alertLevel'
 }
+
+export const ALERT_LEVEL_ICON: Record<AlertLevel, string> = {
+  critical: '\u{1F534}', // 🔴
+  high:     '\u{1F7E0}', // 🟠
+  medium:   '\u{1F7E1}', // 🟡
+}
+
+export const ALERT_LEVEL_LABEL: Record<AlertLevel, string> = {
+  critical: 'Red — Critical only',
+  high:     'Orange — High priority & above',
+  medium:   'Yellow — All alerts',
+}
+
+const SEVERITY_RANK: Record<Severity, number> = { critical: 3, high: 2, medium: 1, low: 0 }
 
 /** Get current ISO week number */
 function getWeekNumber(): number {
   const now = new Date()
   const start = new Date(now.getFullYear(), 0, 1)
-  const diff = now.getTime() - start.getTime()
-  return Math.ceil((diff / 86400000 + start.getDay() + 1) / 7)
+  return Math.ceil(((now.getTime() - start.getTime()) / 86400000 + start.getDay() + 1) / 7)
 }
 
 /**
- * Decide whether to send a notification now or batch it.
- * Returns true if the update should be sent immediately.
+ * Decide whether to push an update immediately.
+ * Returns true only when the update meets the subscriber's alert threshold.
  */
 export function shouldDispatchNow(
   update: RegulatoryUpdate,
   subscriber: BotSubscriber,
 ): boolean {
   const currentWeek = getWeekNumber()
-
-  // Reset weekly count if new week
   if (subscriber.weekNumber !== currentWeek) {
     subscriber.weeklyCount = 0
     subscriber.weekNumber = currentWeek
   }
 
-  // SLA §3.1: critical alerts MUST be delivered within 4 hours — bypass all weekly caps.
-  // The UX preference to limit messages cannot override a contractual SLA obligation.
+  // SLA §3.1: critical alerts always dispatched immediately regardless of settings
   if (update.severity === 'critical') return true
 
-  // Critical-only subscribers get nothing else
+  // critical-only subscribers: nothing else pushed
   if (subscriber.frequency === 'critical-only') return false
 
-  // Weekly: batch everything non-critical into the digest
-  if (subscriber.frequency === 'weekly') {
-    return false
-  }
-
-  // Twice-weekly: allow high-severity up to 2 dispatches per week
-  if (subscriber.frequency === 'twice-weekly') {
-    if (update.severity === 'high' && subscriber.weeklyCount < 2) return true
-    return false
-  }
-
-  return false
+  // Below subscriber's alert threshold: batch into digest only
+  const threshold = subscriber.minSeverity ?? 'high'
+  return SEVERITY_RANK[update.severity] >= SEVERITY_RANK[threshold]
 }
 
 /**
@@ -91,25 +92,18 @@ export function formatTelegramAlert(update: RegulatoryUpdate): string {
   const typeLabel = UPDATE_TYPE_LABELS[update.type]
   const source = REGULATORY_SOURCES.find(s => s.id === update.sourceId)
   const flag = source?.flag ?? ''
+  const alertIcon = ALERT_LEVEL_ICON[update.severity as AlertLevel] ?? ''
 
   const lines: string[] = [
-    `${icon} *${typeLabel}*`,
+    `${alertIcon} ${icon} *${typeLabel}*`,
     `${flag} ${update.regulator} (${update.jurisdictionCode})`,
     '',
     `*${escapeMarkdown(update.title)}*`,
   ]
 
-  if (update.entity) {
-    lines.push(`Entity: ${escapeMarkdown(update.entity)}`)
-  }
-
-  if (update.fineAmount) {
-    lines.push(`Penalty: ${escapeMarkdown(update.fineAmount)}`)
-  }
-
-  if (update.deadlineDate) {
-    lines.push(`Deadline: ${escapeMarkdown(update.deadlineDate)}`)
-  }
+  if (update.entity) lines.push(`Entity: ${escapeMarkdown(update.entity)}`)
+  if (update.fineAmount) lines.push(`Penalty: ${escapeMarkdown(update.fineAmount)}`)
+  if (update.deadlineDate) lines.push(`Deadline: ${escapeMarkdown(update.deadlineDate)}`)
 
   lines.push('')
   lines.push(escapeMarkdown(update.summary))
@@ -133,7 +127,7 @@ export function formatWeeklyDigest(updates: RegulatoryUpdate[], jurisdictions: s
       '',
       'No new regulatory updates this week. Your compliance posture remains unchanged.',
       '',
-      '_Stay vigilant. Reply /settings to adjust your preferences._',
+      '_Reply /latest anytime or /settings to adjust preferences._',
     ].join('\n')
   }
 
@@ -153,7 +147,6 @@ export function formatWeeklyDigest(updates: RegulatoryUpdate[], jurisdictions: s
     '',
   ]
 
-  // Enforcement first (most important)
   const priorityOrder: string[] = ['enforcement', 'deadline', 'regulation', 'sanction', 'consultation', 'guidance', 'licensing']
 
   for (const type of priorityOrder) {
@@ -165,47 +158,111 @@ export function formatWeeklyDigest(updates: RegulatoryUpdate[], jurisdictions: s
     lines.push(`${icon} *${label}* (${items.length})`)
 
     for (const item of items.slice(0, 5)) {
+      const severityDot = ALERT_LEVEL_ICON[item.severity as AlertLevel] ?? ''
       const fine = item.fineAmount ? ` — ${item.fineAmount}` : ''
-      lines.push(`  • ${escapeMarkdown(item.title)}${fine}`)
+      lines.push(`  ${severityDot} ${escapeMarkdown(item.title)}${fine}`)
       if (item.url) lines.push(`    [Details](${item.url})`)
     }
 
-    if (items.length > 5) {
-      lines.push(`  _...and ${items.length - 5} more_`)
-    }
-
+    if (items.length > 5) lines.push(`  _...and ${items.length - 5} more_`)
     lines.push('')
   }
 
-  lines.push('_Reply /settings to adjust frequency or jurisdictions._')
-  lines.push('_Reply /email to add a weekly email digest._')
+  lines.push('_Reply /settings to adjust alert level or jurisdictions._')
 
   return lines.join('\n')
 }
 
 /**
- * Format a welcome message for new subscribers.
+ * Step 1 of onboarding: ask which jurisdictions to track.
  */
-export function formatWelcomeMessage(jurisdictions: string[]): string {
+export function formatJurisdictionPrompt(): string {
+  const lines = [
+    '\u{1F30D} *Step 1 of 2 — Choose your jurisdictions*',
+    '',
+    'Reply with the jurisdiction codes you want to track, separated by spaces.',
+    'Or reply `ALL` to track every available jurisdiction.',
+    '',
+    '*Available jurisdictions:*',
+  ]
+
+  for (const group of JURISDICTION_GROUPS) {
+    const codes = group.sources.map(s => `\`${s.jurisdictionCode}\``).join('  ')
+    lines.push(`${group.flag} *${group.country}:* ${codes}`)
+  }
+
+  lines.push('')
+  lines.push('_Example: `VARA ADGM CBB`_')
+
+  return lines.join('\n')
+}
+
+/**
+ * Step 2 of onboarding: ask which alert level to use.
+ */
+export function formatAlertLevelPrompt(): string {
+  return [
+    '\u{1F514} *Step 2 of 2 — Choose your alert level*',
+    '',
+    'What severity should trigger an *immediate push notification* to you?',
+    '(Everything else is batched into your weekly digest)',
+    '',
+    `\u{1F534} \`red\` — *Critical only*`,
+    '    Major enforcement, license revocations, mandatory deadlines',
+    '',
+    `\u{1F7E0} \`orange\` — *High priority & above* _(recommended)_`,
+    '    Above + new regulations, framework amendments, sanctions',
+    '',
+    `\u{1F7E1} \`yellow\` — *All alerts*`,
+    '    Above + consultations, licensing updates, guidance notes',
+    '',
+    'Reply with: `red`, `orange`, or `yellow`',
+  ].join('\n')
+}
+
+/**
+ * Format the /alert command display and options.
+ */
+export function formatAlertLevelMessage(current: AlertLevel): string {
+  const lines = [
+    '\u{1F514} *Alert Level*',
+    '',
+    `Current: ${ALERT_LEVEL_ICON[current]} *${ALERT_LEVEL_LABEL[current]}*`,
+    '',
+    '*To change, reply with:*',
+    `\u{1F534} \`/alert red\` — Critical only (major enforcement, mandatory deadlines)`,
+    `\u{1F7E0} \`/alert orange\` — High priority & above (+ new regulations, sanctions)`,
+    `\u{1F7E1} \`/alert yellow\` — All alerts (+ consultations, licensing updates)`,
+    '',
+    '_Everything below your threshold is batched into your weekly digest._',
+  ]
+  return lines.join('\n')
+}
+
+/**
+ * Format the final welcome message shown after onboarding is complete.
+ */
+export function formatWelcomeMessage(jurisdictions: string[], minSeverity: AlertLevel = 'high'): string {
   return [
     '\u{1F44B} *Welcome to Zawda Regulatory Alerts*',
     '',
-    "You'll receive curated regulatory intelligence for:",
-    ...jurisdictions.map(j => `  • ${j}`),
+    `Alert level: ${ALERT_LEVEL_ICON[minSeverity]} *${ALERT_LEVEL_LABEL[minSeverity]}*`,
+    `Tracking: ${jurisdictions.join(', ')}`,
     '',
-    '*How it works:*',
-    '• Weekly digest every Monday at 8am GST',
-    '• Breaking alerts only for critical enforcement actions or deadline changes',
-    '• Maximum 1-2 messages per week — we respect your attention',
+    '*What to expect:*',
+    '• Immediate push for alerts at or above your threshold',
+    '• Weekly digest every Monday at 8am GST with everything else',
+    '• Critical enforcement actions always delivered within 4 hours',
     '',
     '*Commands:*',
-    '/settings — Change frequency or jurisdictions',
+    '/alert — Change your alert level (🔴/🟠/🟡)',
     '/jurisdictions — Update tracked jurisdictions',
-    '/frequency — Switch between weekly / twice-weekly / critical-only',
-    '/email — Add email for parallel weekly digest',
-    '/latest — See the latest regulatory updates',
-    '/status — Check your subscription status',
+    '/frequency — Switch digest cadence',
+    '/email — Add email for weekly digest',
+    '/latest — See recent updates',
+    '/status — Check your subscription',
     '/help — Show all commands',
+    '/stop — Unsubscribe',
     '',
     '_Powered by Zawda — zawda.me_',
   ].join('\n')
@@ -215,23 +272,24 @@ export function formatWelcomeMessage(jurisdictions: string[]): string {
  * Format a status message.
  */
 export function formatStatusMessage(subscriber: BotSubscriber): string {
+  const level = subscriber.minSeverity ?? 'high'
   return [
-    '\u{1F4CA} *Your Subscription Status*',
+    '\u{1F4CA} *Your Subscription*',
     '',
-    `Channel: ${subscriber.channel === 'telegram' ? 'Telegram' : 'WhatsApp'}`,
-    `Frequency: ${subscriber.frequency}`,
+    `Alert level: ${ALERT_LEVEL_ICON[level]} ${ALERT_LEVEL_LABEL[level]}`,
     `Jurisdictions: ${subscriber.jurisdictions.join(', ')}`,
+    `Digest frequency: ${subscriber.frequency}`,
     `Email digest: ${subscriber.email ?? 'Not set'}`,
     `Messages this week: ${subscriber.weeklyCount}`,
     `Member since: ${new Date(subscriber.createdAt).toLocaleDateString()}`,
     '',
-    '_Reply /settings to make changes._',
+    '_/alert to change level · /jurisdictions to change regions_',
   ].join('\n')
 }
 
 /** Escape Telegram MarkdownV1 special characters */
 function escapeMarkdown(text: string): string {
-  return text.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1')
+  return text.replace(/([_*[\]()~`>#+\-=|{}.!])/g, '\\$1')
 }
 
 /**

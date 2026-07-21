@@ -1,8 +1,12 @@
 {
   "crons": [
     {
+      "path": "/api/cron/crawl-regulatory",
+      "schedule": "0 6,18 * * *"
+    },
+    {
       "path": "/api/cron/crawl",
-      "schedule": "0 8 * * *"
+      "schedule": "0 */3 * * *"
     }
   ],
   "headers": [

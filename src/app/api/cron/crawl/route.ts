@@ -36,10 +36,15 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? ''
 /** SLA §3.1: critical alerts must be dispatched within this many hours */
 const CRITICAL_SLA_HOURS = 4
 
-function checkAuth(request: Request): boolean {
+function requireCronAuth(request: Request): NextResponse | null {
   const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) return true // no secret set — open (development only)
-  return request.headers.get('authorization') === `Bearer ${cronSecret}`
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET is not configured' }, { status: 503 })
+  }
+  if (request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return null
 }
 
 async function runDispatch(): Promise<NextResponse> {
@@ -147,9 +152,8 @@ async function runDispatch(): Promise<NextResponse> {
  * GET — called by Vercel Crons (every 3 hours) and by ?action= queries.
  */
 export async function GET(request: Request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const authError = requireCronAuth(request)
+  if (authError) return authError
 
   const url = new URL(request.url)
   const action = url.searchParams.get('action')
@@ -213,9 +217,8 @@ export async function GET(request: Request) {
  * Useful for testing and backfill without waiting for the cron.
  */
 export async function POST(request: Request) {
-  if (!checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const authError = requireCronAuth(request)
+  if (authError) return authError
 
   return runDispatch()
 }

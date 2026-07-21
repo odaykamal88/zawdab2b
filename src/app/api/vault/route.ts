@@ -2,13 +2,43 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { redis } from '@/lib/redis'
-import { listVault, storeFile, limitsFor } from '@/lib/vault-storage'
+import { listVault, storeFile, limitsFor, type VaultRecord } from '@/lib/vault-storage'
 import { writeAuditLog, extractRequestMeta } from '@/lib/audit-log'
+import { getSubscription, isFeatureAllowed, type SubscriptionRecord } from '@/lib/subscription'
 
 const ratelimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(30, '1 m'),
 })
+
+function resolveVaultPlan(subscription: SubscriptionRecord | null): string | undefined {
+  const planId = subscription?.plan ?? ''
+  if (planId.includes('enterprise')) return 'enterprise'
+  if (planId.includes('professional')) return 'professional'
+  return undefined
+}
+
+async function getVaultEntitlements(userId: string): Promise<{ canUpload: boolean; plan: string | undefined }> {
+  const subscription = await getSubscription(userId)
+  const canUpload = isFeatureAllowed(subscription, 'vault')
+  return {
+    canUpload,
+    plan: canUpload ? resolveVaultPlan(subscription) : undefined,
+  }
+}
+
+function toClientRecord(record: VaultRecord): Omit<VaultRecord, 'tenantId' | 'blobUrl' | 'blobPathname'> {
+  return {
+    id: record.id,
+    docId: record.docId,
+    filename: record.filename,
+    mimeType: record.mimeType,
+    size: record.size,
+    sha256: record.sha256,
+    uploadedAt: record.uploadedAt,
+    encrypted: record.encrypted,
+  }
+}
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth()
@@ -17,7 +47,7 @@ export async function GET(req: NextRequest) {
   const { success } = await ratelimit.limit(userId)
   if (!success) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 
-  const plan = req.headers.get('x-plan') ?? undefined
+  const entitlements = await getVaultEntitlements(userId)
   const records = await listVault(userId)
 
   const { ip, userAgent } = extractRequestMeta(req)
@@ -33,8 +63,9 @@ export async function GET(req: NextRequest) {
   }).catch(() => undefined)
 
   return NextResponse.json({
-    records: records.map(({ tenantId: _t, blobUrl: _b, ...rest }) => rest),
-    limits: limitsFor(plan),
+    records: records.map(toClientRecord),
+    limits: entitlements.canUpload ? limitsFor(entitlements.plan) : null,
+    canUpload: entitlements.canUpload,
   })
 }
 
@@ -45,7 +76,10 @@ export async function POST(req: NextRequest) {
   const { success } = await ratelimit.limit(userId)
   if (!success) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 
-  const plan = req.headers.get('x-plan') ?? undefined
+  const entitlements = await getVaultEntitlements(userId)
+  if (!entitlements.canUpload) {
+    return NextResponse.json({ error: 'Vault access requires an eligible paid plan.' }, { status: 403 })
+  }
 
   let form: FormData
   try {
@@ -72,7 +106,7 @@ export async function POST(req: NextRequest) {
     filename: safeName,
     mimeType: file.type || 'application/octet-stream',
     data: buf,
-    plan,
+    plan: entitlements.plan,
   })
 
   if ('error' in result) {
@@ -102,6 +136,5 @@ export async function POST(req: NextRequest) {
     details: { filename: result.record.filename, size: result.record.size },
   }).catch(() => undefined)
 
-  const { tenantId: _t, blobUrl: _b, ...record } = result.record
-  return NextResponse.json({ record })
+  return NextResponse.json({ record: toClientRecord(result.record) })
 }
