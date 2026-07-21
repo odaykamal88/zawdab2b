@@ -1,7 +1,11 @@
 export function TrackRecordSection() {
   const TIMELINE = [
     { title: 'Wolf Accelerator + Axiom Capital', description: '$450K raised. First institutional-grade digital asset advisory in the region.' },
-    { title: 'CBB Category 3 Provisional License', description: 'Application submitted for Central Bank of Bahrain Category 3 provisional license — one of the first in the digital asset advisory space.' },
+    // NOTE: Per the CBB in-principle letter (OG/156/2025) caveat (iii), public copy must NOT
+    // claim CBB approval or reference the in-principle confirmation — doing so risks the
+    // application being cancelled. Keep this factual and non-approval-claiming; the actual
+    // letter stays confidential to the diligence data room.
+    { title: 'CBB Crypto-Asset licence — application filed', description: 'Applied to the Central Bank of Bahrain for a Crypto-Asset Service Provider (Category 2) licence for Zawda W.L.L. (under formation).' },
     { title: 'THNDR — Early Conversations', description: 'Engaged with THNDR on institutional Bitcoin infrastructure for the GCC market.' },
     { title: '3 Companies Licensed', description: 'Guided three companies through the MENA digital asset licensing process — VARA, ADGM, and CBB frameworks.' },
     { title: '21+ Institutional Buyers', description: '21+ institutional buyers facilitated with approximately 100 BTC acquired at institutional OTC rates.' },
