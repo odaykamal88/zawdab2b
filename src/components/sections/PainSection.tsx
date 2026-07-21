@@ -41,11 +41,11 @@ export function PainSection() {
           {/* Source: fatf-gafi.org — Travel Rule deadline */}
           <div className="bg-bg-primary border border-border border-l-4 border-l-gold rounded-lg p-6">
             <span className="font-mono text-gold font-bold text-[length:var(--text-xl)]">
-              March 2026
+              In effect
             </span>
-            <p className="text-text mt-2 font-medium text-[length:var(--text-sm)]">Travel Rule deadline</p>
+            <p className="text-text mt-2 font-medium text-[length:var(--text-sm)]">Travel Rule enforcement</p>
             <p className="text-text-muted text-[length:var(--text-xs)] mt-1">
-              FATF Travel Rule enforcement begins across all MENA jurisdictions. Non-compliant VASPs face license suspension or revocation.
+              The FATF Travel Rule has been enforced across MENA jurisdictions since March 2026. Non-compliant VASPs face license suspension or revocation.
             </p>
           </div>
 
@@ -99,7 +99,7 @@ export function PainSection() {
             <ul className="space-y-3 text-text-muted text-[length:var(--text-base)]">
               <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>Operating a VASP without a full license in any MENA jurisdiction</li>
               <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>Marketing virtual asset services without regulator-approved materials</li>
-              <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>No Travel Rule solution with the March 2026 deadline approaching</li>
+              <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>No Travel Rule solution now that enforcement is in effect (since March 2026)</li>
               <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>Board reporting that doesn&rsquo;t cover digital asset regulatory risk</li>
               <li className="flex items-start gap-3"><span className="text-alert mt-1">&#9679;</span>Holding digital assets on balance sheet without compliant custody and AML framework</li>
             </ul>

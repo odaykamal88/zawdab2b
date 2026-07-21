@@ -154,7 +154,7 @@ export const JURISDICTIONS: JurisdictionData[] = [
       {
         id: 'vara-travel-rule', step: 10, category: 'post-license',
         title: 'Implement Travel Rule Solution',
-        description: 'Deploy a FATF-compliant Travel Rule solution (IVMS 101 format) for originator/beneficiary data on transfers above the threshold. Must be operational before March 2026 deadline.',
+        description: 'Deploy a FATF-compliant Travel Rule solution (IVMS 101 format) for originator/beneficiary data on transfers above the threshold. Must be operational — the Travel Rule has been in effect since March 2026.',
         documents: ['Travel Rule solution vendor contract', 'IVMS 101 integration documentation', 'Testing results with counterparty VASPs'],
         timeline: '4–8 weeks',
         riskWarning: '37% of VASPs globally have never received a Travel Rule transfer. If your counterparties are not compliant, you bear the risk. Document your due diligence on counterparty compliance.',

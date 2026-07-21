@@ -30,7 +30,7 @@ const JURISDICTIONS: Jurisdiction[] = [
     status: 'Active',
     statusColor: 'text-emerald-600 bg-emerald-50',
     licenseTypes: ['Advisory Services License', 'Broker-Dealer License', 'Exchange License', 'Custody License', 'Lending/Borrowing License', 'Transfer & Settlement License', 'Stablecoin Issuance License', 'Stablecoin Management License'],
-    keyDates: ['Penalties up to AED 600K per violation for unlicensed activity', 'March 2026: Travel Rule enforcement deadline', 'Q1 2026: Quarterly compliance returns due'],
+    keyDates: ['Penalties up to AED 600K per violation for unlicensed activity', 'Travel Rule enforcement in effect since March 2026', 'Quarterly compliance returns due each quarter'],
     enforcement: 'High — active monitoring and license revocation.',
     enforcementExamples: [
       'Dec 2025: VARA fined 7 VASPs for operating without proper license scope — AED 600K each',
@@ -41,7 +41,7 @@ const JURISDICTIONS: Jurisdiction[] = [
     notes: 'Most active regulator in MENA. Full framework operational since 2023. Mandatory licensing for all VASP activities. VARA has the most comprehensive stablecoin framework in the region.',
     source: 'https://vara.ae',
     latestNews: [
-      { headline: 'VARA publishes updated Travel Rule implementation guidelines for March 2026 deadline', url: 'https://vara.ae/en/regulations' },
+      { headline: 'VARA Travel Rule implementation guidelines now in force (effective March 2026)', url: 'https://vara.ae/en/regulations' },
       { headline: 'New stablecoin reserve attestation requirements effective Q2 2026', url: 'https://vara.ae/en/regulations' },
       { headline: 'VARA launches enhanced VASP compliance monitoring portal', url: 'https://vara.ae/en/compliance-reporting' },
     ],

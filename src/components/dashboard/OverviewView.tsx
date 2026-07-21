@@ -25,10 +25,10 @@ const ALERTS = [
   {
     severity: 'critical' as const,
     jurisdiction: 'vara',
-    title: 'VARA Travel Rule Deadline — March 2026',
+    title: 'VARA Travel Rule — In Effect Since March 2026',
     description:
-      'FATF Travel Rule enforcement begins March 2026. Non-compliant VASPs face license suspension. Ensure your IVMS 101 solution is implemented and tested with counterparty VASPs.',
-    date: 'Deadline: March 2026',
+      'FATF Travel Rule enforcement has been in effect since March 2026. Non-compliant VASPs face license suspension. Ensure your IVMS 101 solution is implemented and tested with counterparty VASPs.',
+    date: 'In effect since March 2026',
   },
   {
     severity: 'high' as const,
@@ -121,7 +121,7 @@ const STAGE_CONTEXT: Record<string, { heading: string; actionItems: string[] }> 
   licensed: {
     heading: 'You hold a license. Ongoing compliance is critical:',
     actionItems: [
-      'Review the <strong>Travel Rule readiness assessment</strong> — March 2026 deadline is approaching.',
+      'Review the <strong>Travel Rule readiness assessment</strong> — enforcement is now in effect (since March 2026).',
       'Ensure your <strong>quarterly compliance returns</strong> are filed on time.',
       'Keep your <strong>audit pack</strong> current — random audits can happen with 48-hour notice.',
     ],
