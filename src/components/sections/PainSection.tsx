@@ -18,13 +18,14 @@ export function PainSection() {
 
         {/* Enforcement stat cards */}
         <div className="grid sm:grid-cols-4 gap-5 mt-12">
+          {/* Source: ADGM FSRA (HAYVN Group $8.85M, Apr 2025) + VARA enforcement notices (AED 7.5M marketing fines Jun 2025; 19 firms penalised Oct 2025) */}
           <div className="bg-bg-primary border border-border border-l-4 border-l-alert rounded-lg p-6">
             <span className="font-mono text-alert font-bold text-[length:var(--text-xl)]">
               $12M+
             </span>
             <p className="text-text mt-2 font-medium text-[length:var(--text-sm)]">Aggregate MENA fines</p>
             <p className="text-text-muted text-[length:var(--text-xs)] mt-1">
-              Combined penalties across VARA, ADGM, and CBB in the past 12 months — cease-and-desist orders, license restrictions, and financial sanctions.
+              Combined VARA and ADGM penalties since 2025 — including an $8.85M ADGM fine and 19 firms sanctioned by VARA in a single action.
             </p>
           </div>
 

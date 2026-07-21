@@ -38,7 +38,7 @@ export function HeroSection() {
             className="font-display font-extrabold tracking-tight text-text"
             style={{ fontSize: 'var(--text-2xl)' }}
           >
-            MENA Regulators Issued $12M+ in Fines Last Year. Is Your Firm Ready?
+            MENA Regulators Issued $12M+ in Fines Since 2025. Is Your Firm Ready?
           </h1>
           <p className="text-text-muted mt-4 max-w-2xl mx-auto" style={{ fontSize: 'var(--text-lg)' }}>
             <BrandName className="text-gold font-semibold" /> gives CFOs, compliance officers, and legal counsel
