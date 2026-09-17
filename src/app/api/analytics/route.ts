@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { redis } from '@/lib/redis'
 
 const ANALYTICS_KEY = 'analytics'
@@ -24,6 +25,16 @@ async function getAnalytics(): Promise<AnalyticsData> {
 }
 
 export async function GET() {
+  const { userId, sessionClaims } = await auth()
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const role = (sessionClaims?.metadata as Record<string, unknown> | undefined)?.role
+  if (role !== 'superadmin') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const [analytics, subscribers, botSubscribers] = await Promise.all([
     getAnalytics(),
     redis.get<unknown[]>(SUBSCRIBERS_KEY).then((d) => d ?? []),

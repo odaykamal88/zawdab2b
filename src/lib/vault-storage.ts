@@ -1,4 +1,4 @@
-import { put, del } from '@vercel/blob'
+import { put, del, get } from '@vercel/blob'
 import { redis } from './redis'
 import { randomUUID, createHash } from 'crypto'
 import { encrypt, decrypt, serialize, deserialize } from './vault-crypto'
@@ -14,6 +14,7 @@ export interface VaultRecord {
   uploadedAt: string
   encrypted: true
   blobUrl: string
+  blobPathname?: string
 }
 
 function indexKey(tenantId: string): string {
@@ -72,10 +73,10 @@ export async function storeFile(params: {
   const encryptedBlob = encrypt(params.data)
   const serialized = serialize(encryptedBlob)
 
-  const { url: blobUrl } = await put(
+  const { url: blobUrl, pathname: blobPathname } = await put(
     `vault/${params.tenantId}/${id}.bin`,
     serialized,
-    { access: 'public', contentType: 'application/octet-stream', addRandomSuffix: false },
+    { access: 'private', contentType: 'application/octet-stream', addRandomSuffix: false },
   )
 
   const record: VaultRecord = {
@@ -89,6 +90,7 @@ export async function storeFile(params: {
     uploadedAt: new Date().toISOString(),
     encrypted: true,
     blobUrl,
+    blobPathname,
   }
 
   const records = await readIndex(params.tenantId)
@@ -103,9 +105,21 @@ export async function readFileDecrypted(tenantId: string, id: string): Promise<{
   const record = records.find((r) => r.id === id)
   if (!record) return null
   try {
-    const response = await fetch(record.blobUrl)
-    if (!response.ok) return null
-    const raw = Buffer.from(await response.arrayBuffer())
+    let raw: Buffer | null = null
+
+    if (record.blobPathname) {
+      const blob = await get(record.blobPathname, { access: 'private' })
+      if (blob?.statusCode === 200 && blob.stream) {
+        raw = Buffer.from(await new Response(blob.stream).arrayBuffer())
+      }
+    }
+
+    if (!raw) {
+      const response = await fetch(record.blobUrl)
+      if (!response.ok) return null
+      raw = Buffer.from(await response.arrayBuffer())
+    }
+
     const blob = deserialize(raw)
     const data = decrypt(blob)
     return { record, data }
@@ -119,7 +133,7 @@ export async function deleteFile(tenantId: string, id: string): Promise<boolean>
   const record = records.find((r) => r.id === id)
   if (!record) return false
   try {
-    await del(record.blobUrl)
+    await del(record.blobPathname ?? record.blobUrl)
   } catch {
     /* already gone */
   }
